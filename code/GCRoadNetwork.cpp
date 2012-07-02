@@ -50,6 +50,6 @@ int GCRoadNetwork::numberEdges()
 
 GCEdge * GCRoadNetwork::getEdgeAt(int idx)
 {
-    return edges->at(idx);
+    return (edges->at(idx));
 
 }

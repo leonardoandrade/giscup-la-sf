@@ -29,6 +29,7 @@ class GCEdge
         string getWKT();
         int getId();
         void addPoint(float x, float y);
+        void addPoint(int x, int y);
         float * getPointAt(int index);
         void buildGeometry();
         int numberPoints();

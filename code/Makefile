@@ -1,6 +1,10 @@
 CC=g++
-LIBS=/usr/lib/libgeos.a -lpqxx
-OBJS=GCPoint.o GCEdge.o GCDataUtils.o GCRoadNetwork.o
+LIBS=/usr/lib/libproj.a /usr/lib/libgeos.a
+OBJS=GCPoint.o GCEdge.o GCDataUtils.o GCRoadNetwork.o GCPointsTrack.o
+HEADERS=GCDataUtils.h  GCEdge.h  GC.h  GCPoint.h  GCPointsTrack.h  GCRoadNetwork.h
+
+GCPointsTrack.o: GCPointsTrack.cpp GCPointsTrack.h
+	$(CC) -c GCPointsTrack.cpp -o GCPointsTrack.o
 
 GCPoint.o: GCPoint.cpp GCPoint.h
 	$(CC) -c GCPoint.cpp -o GCPoint.o
@@ -14,8 +18,10 @@ GCDataUtils.o: GCDataUtils.cpp GCDataUtils.h
 GCRoadNetwork.o: GCRoadNetwork.cpp GCRoadNetwork.h 
 	$(CC) -c GCRoadNetwork.cpp -o GCRoadNetwork.o
 
-boda: $(OBJS) boda.cpp
-	$(CC) boda.cpp  $(OBJS) $(LIBS)  -o boda 
+mapmatch.exe: $(OBJS) main.cpp
+	$(CC) main.cpp  $(OBJS) $(LIBS)  -o mapmatch.exe
+
+all: mapmatch.exe
 
 clean:
-	rm *.o boda
+	rm *.o giscup

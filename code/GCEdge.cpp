@@ -27,6 +27,11 @@ void GCEdge::addPoint(float x, float y)
 }
 
 
+void GCEdge::addPoint(int x, int y)
+{
+    seq->add(Coordinate(x,y));
+}
+
 int GCEdge::numberPoints()
 {
    return seq->getSize();
@@ -65,5 +70,4 @@ void GCEdge::dump()
     string wkt = wkt_writer->write(geometry);
     cout << "EDGE WKT= " << wkt << endl;
 }
-
 

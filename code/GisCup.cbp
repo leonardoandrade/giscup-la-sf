@@ -32,15 +32,17 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="GC.h" />
 		<Unit filename="GCDataUtils.cpp" />
 		<Unit filename="GCDataUtils.h" />
 		<Unit filename="GCEdge.cpp" />
 		<Unit filename="GCEdge.h" />
 		<Unit filename="GCPoint.cpp" />
 		<Unit filename="GCPoint.h" />
+		<Unit filename="GCPointsTrack.cpp" />
+		<Unit filename="GCPointsTrack.h" />
 		<Unit filename="GCRoadNetwork.cpp" />
 		<Unit filename="GCRoadNetwork.h" />
-		<Unit filename="boda.cpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
