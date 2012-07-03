@@ -39,9 +39,11 @@ int main(int argc, char ** argv)
 
     GCRoadNetwork * rn=new GCRoadNetwork();
     GCDataUtils::CreateRoadNetworkFromEdgeFile(rn, edge_file_path.str(), true);
+    //GCDataUtils::WriteRoadNetworkToSQLFile(rn,"/tmp/boda.txt");
 
 	clock_t end=clock();
 	cout << rn->numberEdges() << " edges loaded in " << double(diffclock(end,begin)) << " seconds"<< endl;
+
 
 
     //Load the inputs
@@ -68,13 +70,15 @@ int main(int argc, char ** argv)
         {
             break;
         }
-
+        clock_t begin=clock();
 
         cout << "Processing input in file " << input_file_path.str() << endl;
         GCPointsTrack * pt = new GCPointsTrack();
         GCDataUtils::CreatePointsTrackFromFile(pt, input_file_path.str(), true);
         pt->classifyBySimpleDistance(rn);
         GCDataUtils::WritePointsTrackToFile(pt,output_file_path.str());
+        clock_t end=clock();
+        cout << pt->numberPoints() << " points processed in " << double(diffclock(end,begin)) << " seconds"<< endl;
 
     }
 

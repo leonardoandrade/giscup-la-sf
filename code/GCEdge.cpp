@@ -32,6 +32,11 @@ void GCEdge::addPoint(int x, int y)
     seq->add(Coordinate(x,y));
 }
 
+void GCEdge::addPoint(double x, double y)
+{
+    seq->add(Coordinate(x,y));
+}
+
 int GCEdge::numberPoints()
 {
    return seq->getSize();
@@ -41,6 +46,11 @@ int GCEdge::numberPoints()
 string GCEdge::getName()
 {
     return this->name;
+}
+
+int GCEdge::getId()
+{
+    return this->id;
 }
 
 
@@ -53,6 +63,7 @@ string  GCEdge::getWKT()
 {
     WKTWriter * wkt_writer=new WKTWriter();
     string wkt = wkt_writer->write(geometry);
+    delete wkt_writer;
     return wkt;
 }
 
@@ -60,6 +71,12 @@ void GCEdge::buildGeometry()
 {
     GeometryFactory factory;
     geometry=factory.createLineString(seq);
+    //delete seq;
+}
+
+LineString * GCEdge::getGeometry()
+{
+    return geometry;
 }
 
 void GCEdge::dump()

@@ -3,12 +3,13 @@
 #include <sstream>
 using namespace std;
 
-GCPoint::GCPoint(int _id, float _x, float _y)
+GCPoint::GCPoint(int _id, double _x, double _y)
 {
     id=_id;
     x=_x;
     y=_y;
     edge=-1; //initialize as an invalid edge
+    confidence=0.0;
 }
 
 GCPoint::~GCPoint()

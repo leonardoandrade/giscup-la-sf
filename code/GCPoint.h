@@ -7,15 +7,16 @@ class GCPoint
 {
 
     public:
-        GCPoint(int _id, float _x, float _y);
+        GCPoint(int _id, double _x, double _y);
          ~GCPoint();
         string asWKT();
         void dump();
         //members public, for less lines of code...
         int id;
-        float x;
-        float y;
+        double x;
+        double y;
         int edge;
+        float confidence;
 };
 
 #endif

@@ -4,6 +4,30 @@
 #include <algorithm>
 #include <proj_api.h>
 
+#include <iostream>
+#include <fstream>
+#include <string>
+
+#include <sstream>
+projPJ pj_4326, pj_900913;
+
+
+void convert_latlon_to_google_mercator(const double lat,  const double lon, double * x, double * y)
+{
+
+
+
+
+    *x=lon;
+    *y=lat;
+    //cout << "lat:" << lat << " lon:" << lon << " x:" << *x << " y:" << *y << endl;
+    (*x) *= DEG_TO_RAD;
+    (*y) *= DEG_TO_RAD;
+    int p = pj_transform(pj_4326, pj_900913, 1, 1, x, y, NULL );
+    //cout << "lat:" << lat << " lon:" << lon << " x:" << *x << " y:" << *y << endl << endl;
+}
+
+
 vector<string> split_line(const char *str, char c = ' ')
 {
     vector<string> result;
@@ -26,7 +50,6 @@ vector<string> split_line(const char *str, char c = ' ')
 
 void GCDataUtils::CreateRoadNetworkFromEdgeFile(GCRoadNetwork * rn, const string file_path, const bool convert_to_google_mercator)
 {
-    projPJ pj_4326, pj_900913;
     if (!(pj_4326 = pj_init_plus("+proj=longlat +ellps=WGS84 +datum=WGS84")))
     {
         exit(1);
@@ -35,8 +58,6 @@ void GCDataUtils::CreateRoadNetworkFromEdgeFile(GCRoadNetwork * rn, const string
     {
         exit(1);
     }
-
-
     string line;
     ifstream myfile(file_path.c_str());
     if (myfile.is_open())
@@ -53,24 +74,26 @@ void GCDataUtils::CreateRoadNetworkFromEdgeFile(GCRoadNetwork * rn, const string
             GCEdge * e=new GCEdge(atoi(tok[0].c_str()), tok[1], tok[2], atof(tok[3].c_str()), 0, 0 , 0);
             for(int i=4; i<tok.size();i+=2)
             {
-                double x=atof(tok[i+1].c_str());
-                double y=atof(tok[i].c_str());
-                //cout << x << ":" << y << endl;
-                x *= DEG_TO_RAD;
-                y *= DEG_TO_RAD;
-                //cout << x << ":" << y << endl;
+                double * x=new double(atof(tok[i+1].c_str()));
+                double * y=new double(atof(tok[i].c_str()));
                 if(convert_to_google_mercator)
                 {
-                    int p = pj_transform(pj_4326, pj_900913, 1, 1, &x, &y, NULL );
-                    //cout << "p:" << p << endl;
+                    //cout << *x << ":" << *y << "lines:" << count_lines<< endl;
+                    double lat=*y;
+                    double lon=*x;
+                    convert_latlon_to_google_mercator(lat, lon, x,y );
+                    //cout << *x << ":" << *y << "lines:" << count_lines << endl << endl ;
                 }
 
                 //cout << x << ":" << y << endl;
                 //cout << endl;
-                e->addPoint((float)x,(float)y);
+                e->addPoint(*x,*y);
+                delete x;
+                delete y;
             }
             e->buildGeometry();
             rn->addEdge(e);
+            //cout << e->getWKT() << endl;
             count_lines++;
 
 
@@ -124,7 +147,7 @@ void  GCDataUtils::WriteRoadNetworkToSQLFile( GCRoadNetwork * rn, const string f
 }
 
 
-void GCDataUtils::CreatePointsTrackFromFile(GCPointsTrack * pt, const string file_name,  const bool convert_to_google_mercator)
+void GCDataUtils::CreatePointsTrackFromFile(GCPointsTrack * pt, const string file_path,  const bool convert_to_google_mercator)
 {
     projPJ pj_4326, pj_900913;
     if (!(pj_4326 = pj_init_plus("+proj=longlat +ellps=WGS84 +datum=WGS84")))
@@ -136,11 +159,59 @@ void GCDataUtils::CreatePointsTrackFromFile(GCPointsTrack * pt, const string fil
         exit(1);
     }
 
+    string line;
+    ifstream myfile(file_path.c_str());
+    if (myfile.is_open())
+    {
+        int count_lines=0;
+        while ( myfile.good() )
+        {
+            getline (myfile,line);
+            vector<string> tok=split_line(line.c_str(),',');
+            if(tok.size()<3)
+            {
+                continue;
+            }
 
+            //convert coordinate
 
+            double * x=new double(atof(tok[2].c_str()));
+            double * y=new double(atof(tok[1].c_str()));
+            if(convert_to_google_mercator)
+            {
+                double lat=*y;
+                double lon=*x;
+                convert_latlon_to_google_mercator(lat, lon, x, y);
+
+            }
+
+            pt->addPoint(atoi(tok[0].c_str()), *x, *y, -1);
+            delete x;
+            delete y;
+        }
+    }
+    myfile.close();
 }
 
 void GCDataUtils::WritePointsTrackToFile(GCPointsTrack * pt, const string file_name)
 {
 
+    ofstream f;
+    f.open (file_name.c_str(),ios::out |ios::trunc);
+
+    int n_points=pt->numberPoints();
+
+
+    for(int i=0; i<n_points; i++)
+    {
+        ostringstream line;
+        line.setf(ios::fixed);
+
+        GCPoint * p = pt->getPointAt(i);
+        line << p->id << "," << p->edge << "," << p->confidence; //"," << p->x << "," << p->y;
+        //cout << p->id << "," << p->edge << "," << p->confidence << endl;
+        f << line.str() << endl;
+    }
+    f.close();
+    return;
 }

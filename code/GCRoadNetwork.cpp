@@ -14,14 +14,7 @@ GCRoadNetwork::~GCRoadNetwork()
 
 void GCRoadNetwork::addEdge(GCEdge * e)
 {
-
-    //cout << "s1:" << edges->size() << endl;
-    //int sz=edges->size();
-    //edges->resize(sz+1);
-    //(edges->at(sz))=e;
     edges->push_back(e);
-    //cout << "s2:" << edges->size() << endl;
-    //edges[sz]=e;
 }
 
 void GCRoadNetwork::indexEdges()
@@ -51,5 +44,4 @@ int GCRoadNetwork::numberEdges()
 GCEdge * GCRoadNetwork::getEdgeAt(int idx)
 {
     return (edges->at(idx));
-
 }

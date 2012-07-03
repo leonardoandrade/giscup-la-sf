@@ -2,12 +2,15 @@
 
 #ifndef GC_H
 #define GC_H
+
+//#include "GCProfiler.h"
 //INCLUDES
 #include "GCEdge.h"
 #include "GCPoint.h"
 #include "GCRoadNetwork.h"
 #include "GCPointsTrack.h"
 #include "GCDataUtils.h"
+
 
 
 //DEFINITIONS

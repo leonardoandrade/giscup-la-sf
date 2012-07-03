@@ -8,9 +8,12 @@ class GCPointsTrack
     public:
        GCPointsTrack();
         ~GCPointsTrack();
-       void addPoint(int id, float x, float y, int edge);
+       void addPoint(int id, double x, double y, int edge);
        void classifyBySimpleDistance(GCRoadNetwork * rn);
        void classifyByWheightedDistance(GCRoadNetwork * rn);
+       int numberPoints();
+       GCPoint * getPointAt(int idx);
+
     private:
         vector <GCPoint*> * points;
 };
