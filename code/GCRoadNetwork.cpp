@@ -1,6 +1,7 @@
 #include "GCRoadNetwork.h"
 
 
+
 GCRoadNetwork::GCRoadNetwork()
 {
     edges=new vector<GCEdge*>();
@@ -19,7 +20,27 @@ void GCRoadNetwork::addEdge(GCEdge * e)
 
 void GCRoadNetwork::indexEdges()
 {
-    //TODO
+    rtree = new geos::index::strtree::STRtree();
+
+    for(int i=0;i<edges->size();i++)
+    {
+        //cout << edges->at(i)->getWKT() << endl << endl;
+  //      try
+    //    {
+                geos::geom::Geometry * ggg = (edges->at(i)->getGeometry());
+
+                const geos::geom::Envelope * env = ggg->getEnvelopeInternal();
+                rtree->insert(env,edges->at(i));//,(void *)edges->at(i)->getGeometry());
+/*        }
+        catch()
+        {
+
+
+        }
+
+*/
+    }
+
 }
 
 void GCRoadNetwork::dump()
@@ -31,9 +52,46 @@ void GCRoadNetwork::dump()
     }
 }
 
-int GCRoadNetwork::findNearestEdge(GCPoint p)
+vector <GCEdge*>  GCRoadNetwork::findEdgesByRadius(GCPoint * p, int radius)
 {
-    //TODO
+    vector <GCEdge*> ret;
+    //building the bbox polygon
+    CoordinateArraySequence  * pol_seq=new CoordinateArraySequence();
+    pol_seq->add(Coordinate((p->x)-radius, (p->y)-radius));
+    pol_seq->add(Coordinate((p->x)-radius, (p->y)+radius));
+    pol_seq->add(Coordinate((p->x)+radius, (p->y)+radius));
+    pol_seq->add(Coordinate((p->x)+radius, (p->y)-radius));
+    pol_seq->add(Coordinate((p->x)-radius, (p->y)-radius));
+    GeometryFactory factory;
+    Polygon * pol=factory.createPolygon(factory.createLinearRing(pol_seq), NULL);
+
+
+
+    WKTWriter * wkt_writer=new WKTWriter();
+    string wkt = wkt_writer->write(pol);
+
+    cout << "WKT;" << wkt << endl;
+
+    vector <void*>  vvv;
+
+    this->rtree->query(pol->getEnvelopeInternal(), vvv);
+    for(int i =0; i< vvv.size(); i++)
+    {
+        GCEdge * e = (GCEdge*)vvv.at(i);
+        ret.push_back(e);
+    }
+/*
+    for(int i =0; i < this->edges->size(); i++)
+    {
+        if(this->edges->at(i)->getGeometry()->intersects(pol))
+        {
+            ret.push_back(this->edges->at(i));
+        }
+    }
+*/
+
+    cout << "# edges matched:" << ret.size() << endl;
+    return ret;
 }
 
 int GCRoadNetwork::numberEdges()

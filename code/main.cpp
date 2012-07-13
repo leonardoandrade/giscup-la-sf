@@ -39,6 +39,7 @@ int main(int argc, char ** argv)
 
     GCRoadNetwork * rn=new GCRoadNetwork();
     GCDataUtils::CreateRoadNetworkFromEdgeFile(rn, edge_file_path.str(), true);
+    rn->indexEdges();
     //GCDataUtils::WriteRoadNetworkToSQLFile(rn,"/tmp/boda.txt");
 
 	clock_t end=clock();

@@ -47,11 +47,13 @@ void GCPointsTrack::classifyBySimpleDistance(GCRoadNetwork * rn)
         int n_edges=rn->numberEdges();
         int closest_edge_id=-99;
         float closest_edge_distance=9999999999.0;
+        vector <GCEdge*> ee = rn->findEdgesByRadius(p,1000);
 
         GeometryFactory factory;
-        for(int j=0; j<n_edges; j++)
+        for(int j = 0; j < ee.size(); j++)
         {
-            GCEdge * e = rn->getEdgeAt(j);
+
+            GCEdge * e = ee[j];
             LineString * ls=e->getGeometry();
 
             Point * pp =factory.createPoint(Coordinate(p->x, p->y));

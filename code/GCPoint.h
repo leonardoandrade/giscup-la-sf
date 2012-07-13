@@ -17,6 +17,8 @@ class GCPoint
         double y;
         int edge;
         float confidence;
+
+
 };
 
 #endif
