@@ -27,7 +27,9 @@ create table t_giscup_track_point_1
     id integer unique not null,
     edge integer,
     confidence float,
-    comments varchar
+    comments varchar,
+    correct boolean,
+    speed float
 );
 select addgeometrycolumn('t_giscup_track_point_1','the_geom',900913,'POINT', 2);
 
@@ -38,7 +40,9 @@ create table t_giscup_track_point_2
     id integer unique not null,
     edge integer,
     confidence float,
-    comments varchar
+    comments varchar,
+    correct boolean,
+    speed float
 );
 select addgeometrycolumn('t_giscup_track_point_2','the_geom',900913,'POINT', 2);
 
@@ -49,7 +53,9 @@ create table t_giscup_track_point_3
     id integer unique not null,
     edge integer,
     confidence float,
-    comments varchar
+    comments varchar,
+    correct boolean,
+    speed float
 );
 select addgeometrycolumn('t_giscup_track_point_3','the_geom',900913,'POINT', 2);
 

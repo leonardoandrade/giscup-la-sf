@@ -13,6 +13,7 @@ class GCPointsTrack
         void wheightDirection(GCRoadNetwork * rn);
         void wheightAdjacency(GCRoadNetwork * rn);
         void computeSimilarity(GCRoadNetwork * rn);
+        void computeSpeed();
         int  numberPoints();
         GCPoint * getPointAt(int idx);
 

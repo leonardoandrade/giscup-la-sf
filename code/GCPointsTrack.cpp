@@ -3,9 +3,14 @@
 #include "geos/geom/Coordinate.h"
 #include "geos/geom/Point.h"
 #include "geos/geom/GeometryFactory.h"
-
+#include <math.h>
 
 using namespace std;
+
+float distance(float x0, float y0, float x1, float y1)
+{
+    return sqrt(pow(x1-x0,2)+pow(y1-y0,2));
+}
 
 GCPointsTrack::GCPointsTrack()
 {
@@ -53,12 +58,12 @@ void GCPointsTrack::findNearestEdges(GCRoadNetwork * rn)
     cout << "processing track with  " << points->size() << " points" << endl;
     for(int i=0; i<points->size(); i++)
     {
-        cout << "processing point "<< i << "/" << points->size() << endl;
+        //cout << "processing point "<< i << "/" << points->size() << endl;
         GCPoint * p = (points->at(i));
         //int n_edges=rn->numberEdges();
         //int closest_edge_id=-99;
         //float closest_edge_distance=9999999999.0;
-        vector <GCEdge*> ee = rn->findEdgesByRadius(p,10000);
+        vector <GCEdge*> ee = rn->findEdgesByRadius(p,1000);
 
 
 
@@ -79,18 +84,23 @@ void GCPointsTrack::findNearestEdges(GCRoadNetwork * rn)
             eedd.push_back(ed);
         }
         sort(eedd.begin(), eedd.end(), comp_edge_distance);
-        for(int i=0; i<min((int)EVALUATED_EDGES, (int)eedd.size()); i++)
+        p->num_edges=min((int)EVALUATED_EDGES, (int)eedd.size());
+        for(int i=0; i < p->num_edges; i++)
         {
 
             p->edges_distances[i]=eedd[i].distance;
             p->edges_ids[i]=eedd[i].edge->getId();
             p->edges[i]=eedd[i].edge;
         }
-        for(int i=0; i<min((int)EVALUATED_EDGES, (int)eedd.size()); i++)
+        
+       
+        /*
+        for(int i=0; i < p->num_edges; i++)
         {
             cout << "#" << i << ": " << p->id << ":" << p->edges[i]->getId()  <<  ", "<<  p->edges_distances[i] << endl;
 
         }
+        */
         delete pp;
     }
 }
@@ -116,10 +126,10 @@ void GCPointsTrack::wheightDirection(GCRoadNetwork * rn)
         Coordinate c_before =  Coordinate(points->at(i-1)->x,points->at(i-1)->y);
         GCPoint * p = points->at(i);
         Coordinate c_after = Coordinate(points->at(i+1)->x,points->at(i+1)->y);
-        cout << p->id << endl;
-        for(int j=0;j<EVALUATED_EDGES; j++)
+        //cout << p->id << endl;
+        for(int j=0;j<p->num_edges; j++)
         {
-            cout << "\t" << p->edges[j]->getId() << endl;
+            //cout << "\t" << p->edges[j]->getId() << endl;
             Coordinate edge_start_point=p->edges[j]->getStartPoint();
             Coordinate edge_end_point=p->edges[j]->getEndPoint();
             p->edges_distance_to_start_point[j]=c_after.distance(edge_start_point)-c_before.distance(edge_start_point);
@@ -130,7 +140,7 @@ void GCPointsTrack::wheightDirection(GCRoadNetwork * rn)
     for(int i=1; i<points->size()-1; i++)
     {
         GCPoint * p = points->at(i);
-        for(int j=0;j<EVALUATED_EDGES; j++)
+        for(int j=0;j < p->num_edges; j++)
         {
             if(p->edges_direction_wheight[j]>0.0)
             {
@@ -146,6 +156,18 @@ void GCPointsTrack::wheightDirection(GCRoadNetwork * rn)
 
 }
 
+void GCPointsTrack::computeSpeed()
+{
+        for(int i=1; i<points->size()-1; i++)
+        {
+            float dist=distance(points->at(i-1)->x,points->at(i-1)->y,points->at(i+1)->x,points->at(i+1)->y);
+            int delta_t=(points->at(i+1)->id)-(points->at(i-1)->id);
+            points->at(i)->speed=(dist/(float)delta_t)*3.6;
+        }
+        
+}
+
+
 void GCPointsTrack::wheightAdjacency(GCRoadNetwork * rn)
 {
     //TODO
@@ -153,13 +175,10 @@ void GCPointsTrack::wheightAdjacency(GCRoadNetwork * rn)
 
 void GCPointsTrack::computeSimilarity(GCRoadNetwork * rn)
 {
-
-
         for(int i=0; i<points->size(); i++)
         {
-
             float best=999999;
-            for(int j=0;j<EVALUATED_EDGES; j++)
+            for(int j=0;j < points->at(i)->num_edges; j++)
             {
                 if(points->at(i)->edges_similarity[j]<best)
                 {

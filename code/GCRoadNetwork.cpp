@@ -91,7 +91,7 @@ vector <GCEdge*>  GCRoadNetwork::findEdgesByRadius(GCPoint * p, int radius)
     }
 */
 
-    cout << "# edges matched:" << ret.size() << endl;
+    //cout << "# edges matched:" << ret.size() << endl;
     return ret;
 }
 

@@ -10,6 +10,7 @@ GCPoint::GCPoint(int _id, double _x, double _y)
     y=_y;
     edge=-1; //initialize as an invalid edge
     confidence=0.0;
+    speed=0.0;
     for(int i =0; i< EVALUATED_EDGES; i++)
     {
         this->edges_ids[i]=-1;

@@ -20,6 +20,8 @@ class GCPoint
         double y;
         int edge;
         float confidence;
+        int num_edges;
+        float speed;
         int   edges_ids[EVALUATED_EDGES];
         float edges_distances[EVALUATED_EDGES];
         float edges_direction_wheight[EVALUATED_EDGES];

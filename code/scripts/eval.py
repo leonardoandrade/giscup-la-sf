@@ -31,5 +31,5 @@ if __name__=='__main__':
             pass
             
     internal_evaluation=((points_evaluated+ev)/(points_evaluated*2))*100
-    print "official evaluation for files '",sys.argv[1],"' and '",sys.argv[2],"' is ",ev," (",points_evaluated,") points evaluated"
-    print "internal evaluatios '",sys.argv[1],"' and '",sys.argv[2],"' is ",round(internal_evaluation,2),"%"
+    print "official evaluation for files '",sys.argv[1],"' and '",sys.argv[2],"' is ",ev," (",points_evaluated," points)"
+    print "internal evaluation for files '",sys.argv[1],"' and '",sys.argv[2],"' is ",round(internal_evaluation,2),"% (",points_evaluated," points)"

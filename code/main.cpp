@@ -79,6 +79,7 @@ int main(int argc, char ** argv)
 
         //doing the classification
         pt->findNearestEdges(rn);
+        pt->computeSpeed();
         pt->wheightDirection(rn);
         pt->wheightAdjacency(rn);
         pt->computeSimilarity(rn);
