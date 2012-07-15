@@ -29,4 +29,7 @@ if __name__=='__main__':
             points_evaluated=points_evaluated+1
         except KeyError:
             pass
-    print "evaluation for files '",sys.argv[1],"' and '",sys.argv[2],"' is ",ev," (",points_evaluated,") points evaluated"
+            
+    internal_evaluation=((points_evaluated+ev)/(points_evaluated*2))*100
+    print "official evaluation for files '",sys.argv[1],"' and '",sys.argv[2],"' is ",ev," (",points_evaluated,") points evaluated"
+    print "internal evaluatios '",sys.argv[1],"' and '",sys.argv[2],"' is ",round(internal_evaluation,2),"%"

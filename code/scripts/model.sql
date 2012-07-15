@@ -1,4 +1,4 @@
-drop table t_giscup_edge;
+--drop table t_giscup_edge;
 drop table t_giscup_track_point_1;
 drop table t_giscup_track_point_2;
 drop table t_giscup_track_point_3;
@@ -26,7 +26,8 @@ create table t_giscup_track_point_1
     gid serial primary key,
     id integer unique not null,
     edge integer,
-    confidence float
+    confidence float,
+    comments varchar
 );
 select addgeometrycolumn('t_giscup_track_point_1','the_geom',900913,'POINT', 2);
 
@@ -36,7 +37,8 @@ create table t_giscup_track_point_2
     gid serial primary key,
     id integer unique not null,
     edge integer,
-    confidence float
+    confidence float,
+    comments varchar
 );
 select addgeometrycolumn('t_giscup_track_point_2','the_geom',900913,'POINT', 2);
 
@@ -46,7 +48,8 @@ create table t_giscup_track_point_3
     gid serial primary key,
     id integer unique not null,
     edge integer,
-    confidence float
+    confidence float,
+    comments varchar
 );
 select addgeometrycolumn('t_giscup_track_point_3','the_geom',900913,'POINT', 2);
 

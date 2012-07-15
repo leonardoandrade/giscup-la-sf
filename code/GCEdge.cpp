@@ -21,6 +21,16 @@ GCEdge::~GCEdge()
 
 }
 
+Coordinate GCEdge::getStartPoint()
+{
+    return this->start_point;
+}
+
+Coordinate GCEdge::getEndPoint()
+{
+    return this->end_point;
+}
+
 void GCEdge::addPoint(float x, float y)
 {
     seq->add(Coordinate(x,y));
@@ -71,6 +81,8 @@ void GCEdge::buildGeometry()
 {
     GeometryFactory factory;
     geometry=factory.createLineString(seq);
+    this->start_point=seq->front();
+    this->end_point=seq->back();
     //delete seq;
 }
 
@@ -82,9 +94,12 @@ LineString * GCEdge::getGeometry()
 void GCEdge::dump()
 {
     cout << "ID: "<< id << " name: " << name << "";
-
     WKTWriter * wkt_writer=new WKTWriter();
     string wkt = wkt_writer->write(geometry);
     cout << "EDGE WKT= " << wkt << endl;
 }
 
+float GCEdge::getLength()
+{
+    return 1000;
+}

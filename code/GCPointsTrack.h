@@ -6,13 +6,15 @@
 class GCPointsTrack
 {
     public:
-       GCPointsTrack();
+        GCPointsTrack();
         ~GCPointsTrack();
-       void addPoint(int id, double x, double y, int edge);
-       void classifyBySimpleDistance(GCRoadNetwork * rn);
-       void classifyByWheightedDistance(GCRoadNetwork * rn);
-       int numberPoints();
-       GCPoint * getPointAt(int idx);
+        void addPoint(int id, double x, double y, int edge);
+        void findNearestEdges(GCRoadNetwork * rn);
+        void wheightDirection(GCRoadNetwork * rn);
+        void wheightAdjacency(GCRoadNetwork * rn);
+        void computeSimilarity(GCRoadNetwork * rn);
+        int  numberPoints();
+        GCPoint * getPointAt(int idx);
 
     private:
         vector <GCPoint*> * points;

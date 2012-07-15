@@ -76,7 +76,14 @@ int main(int argc, char ** argv)
         cout << "Processing input in file " << input_file_path.str() << endl;
         GCPointsTrack * pt = new GCPointsTrack();
         GCDataUtils::CreatePointsTrackFromFile(pt, input_file_path.str(), true);
-        pt->classifyBySimpleDistance(rn);
+
+        //doing the classification
+        pt->findNearestEdges(rn);
+        pt->wheightDirection(rn);
+        pt->wheightAdjacency(rn);
+        pt->computeSimilarity(rn);
+
+
         GCDataUtils::WritePointsTrackToFile(pt,output_file_path.str());
         clock_t end=clock();
         cout << pt->numberPoints() << " points processed in " << double(diffclock(end,begin)) << " seconds"<< endl;

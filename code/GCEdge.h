@@ -29,13 +29,16 @@ class GCEdge
         string getWKT();
         int getId();
         void addPoint(float x, float y);
-         void addPoint(double x, double y);
+        void addPoint(double x, double y);
         void addPoint(int x, int y);
         float * getPointAt(int index);
         void buildGeometry();
         int numberPoints();
+        float getLength();
         void dump();
         LineString * getGeometry();
+        Coordinate getStartPoint();
+        Coordinate getEndPoint();
 
     private:
         int id;
@@ -47,6 +50,9 @@ class GCEdge
         string type;
         LineString * geometry;
         CoordinateArraySequence * seq;
+        Coordinate start_point;
+        Coordinate end_point;
+
 
 };
 

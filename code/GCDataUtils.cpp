@@ -208,7 +208,7 @@ void GCDataUtils::WritePointsTrackToFile(GCPointsTrack * pt, const string file_n
         line.setf(ios::fixed);
 
         GCPoint * p = pt->getPointAt(i);
-        line << p->id << "," << p->edge << "," << p->confidence; //"," << p->x << "," << p->y;
+        line << p->id << "," << p->edge << "," << p->confidence << ","  << p->toStr();
         //cout << p->id << "," << p->edge << "," << p->confidence << endl;
         f << line.str() << endl;
     }

@@ -70,7 +70,7 @@ vector <GCEdge*>  GCRoadNetwork::findEdgesByRadius(GCPoint * p, int radius)
     WKTWriter * wkt_writer=new WKTWriter();
     string wkt = wkt_writer->write(pol);
 
-    cout << "WKT;" << wkt << endl;
+    //cout << "WKT;" << wkt << endl;
 
     vector <void*>  vvv;
 
@@ -80,6 +80,7 @@ vector <GCEdge*>  GCRoadNetwork::findEdgesByRadius(GCPoint * p, int radius)
         GCEdge * e = (GCEdge*)vvv.at(i);
         ret.push_back(e);
     }
+
 /*
     for(int i =0; i < this->edges->size(); i++)
     {
