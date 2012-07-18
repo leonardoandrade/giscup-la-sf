@@ -39,6 +39,7 @@ class GCEdge
         LineString * getGeometry();
         Coordinate getStartPoint();
         Coordinate getEndPoint();
+        CoordinateSequence * getCoordinateSequence();
 
     private:
         int id;

@@ -48,7 +48,7 @@ int main(int argc, char ** argv)
 
 
     //Load the inputs
-
+     clock_t begin_classification  =clock();
     for(int i=1; i< MAX_INPUTS; i++)
     {
 
@@ -80,9 +80,10 @@ int main(int argc, char ** argv)
         //doing the classification
         pt->findNearestEdges(rn);
         pt->computeSpeed();
-        pt->wheightDirection(rn);
-        pt->wheightAdjacency(rn);
+        pt->wheightDirection3(rn);
         pt->computeSimilarity(rn);
+        //pt->wheightAdjacency(rn);
+        //pt->computeSimilarity(rn);
 
 
         GCDataUtils::WritePointsTrackToFile(pt,output_file_path.str());
@@ -90,6 +91,9 @@ int main(int argc, char ** argv)
         cout << pt->numberPoints() << " points processed in " << double(diffclock(end,begin)) << " seconds"<< endl;
 
     }
+    end=clock();
+    cout <<  "point track classification in " << double(diffclock(end,begin_classification)) << " seconds"<< endl;
+	cout <<  "total process in " << double(diffclock(end,begin)) << " seconds"<< endl;
 
 
 /*

@@ -86,6 +86,11 @@ void GCEdge::buildGeometry()
     //delete seq;
 }
 
+CoordinateSequence * GCEdge::getCoordinateSequence()
+{
+    return seq;
+}
+
 LineString * GCEdge::getGeometry()
 {
     return geometry;

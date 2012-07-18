@@ -11,6 +11,8 @@ class GCPointsTrack
         void addPoint(int id, double x, double y, int edge);
         void findNearestEdges(GCRoadNetwork * rn);
         void wheightDirection(GCRoadNetwork * rn);
+        void wheightDirection2(GCRoadNetwork * rn);
+        void wheightDirection3(GCRoadNetwork * rn);
         void wheightAdjacency(GCRoadNetwork * rn);
         void computeSimilarity(GCRoadNetwork * rn);
         void computeSpeed();

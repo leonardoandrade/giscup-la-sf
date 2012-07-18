@@ -1,9 +1,13 @@
 #include "GCPointsTrack.h"
 #include "geos/geom/LineString.h"
 #include "geos/geom/Coordinate.h"
+#include "geos/geom/CoordinateSequence.h"
 #include "geos/geom/Point.h"
 #include "geos/geom/GeometryFactory.h"
+#include "geos/geom/PrecisionModel.h"
 #include <math.h>
+
+#include <sstream>
 
 using namespace std;
 
@@ -63,7 +67,7 @@ void GCPointsTrack::findNearestEdges(GCRoadNetwork * rn)
         //int n_edges=rn->numberEdges();
         //int closest_edge_id=-99;
         //float closest_edge_distance=9999999999.0;
-        vector <GCEdge*> ee = rn->findEdgesByRadius(p,1000);
+        vector <GCEdge*> ee = rn->findEdgesByRadius(p,300);
 
 
 
@@ -92,8 +96,8 @@ void GCPointsTrack::findNearestEdges(GCRoadNetwork * rn)
             p->edges_ids[i]=eedd[i].edge->getId();
             p->edges[i]=eedd[i].edge;
         }
-        
-       
+
+
         /*
         for(int i=0; i < p->num_edges; i++)
         {
@@ -108,18 +112,7 @@ void GCPointsTrack::findNearestEdges(GCRoadNetwork * rn)
 
 void GCPointsTrack::wheightDirection(GCRoadNetwork * rn)
 {
-    //getting the distances
-    /*
-    for(int i=0; i<points->size(); i++)
-    {
-        GCPoint * p = points->at(i);
-        for(int j=0;j<EVALUATED_EDGES; j++)
-        {
-            p->edges_distance_to_start_point[j]= p->edges[i]->getStartPoint().distance(Coordinate(p->x, p->y));
-            p->edges_distance_to_end_point[j]= p->edges[i]->getEndPoint().distance(Coordinate(p->x, p->y));
-        }
-    }
-    */
+
     //computing the direction of the point sequence
     for(int i=1; i<points->size()-1; i++)
     {
@@ -137,23 +130,134 @@ void GCPointsTrack::wheightDirection(GCRoadNetwork * rn)
             p->edges_direction_wheight[j]=(p->edges_distance_to_start_point[j]-p->edges_distance_to_end_point[j])/p->edges[j]->getLength();
         }
     }
+
+}
+
+/*second version of the algoritm: weight direction by interception */
+
+void GCPointsTrack::wheightDirection2(GCRoadNetwork * rn)
+{
+    float radius=300.0;
     for(int i=1; i<points->size()-1; i++)
     {
+
+        Coordinate c_before =  Coordinate(points->at(i-1)->x,points->at(i-1)->y);
         GCPoint * p = points->at(i);
+        Coordinate c_after = Coordinate(points->at(i+1)->x,points->at(i+1)->y);
+
+        //create the polygon for intersections
+        CoordinateArraySequence  * pol_seq=new CoordinateArraySequence();
+        pol_seq->add(Coordinate((p->x)-radius, (p->y)-radius));
+        pol_seq->add(Coordinate((p->x)-radius, (p->y)+radius));
+        pol_seq->add(Coordinate((p->x)+radius, (p->y)+radius));
+        pol_seq->add(Coordinate((p->x)+radius, (p->y)-radius));
+        pol_seq->add(Coordinate((p->x)-radius, (p->y)-radius));
+        GeometryFactory factory;
+        Polygon * pol=factory.createPolygon(factory.createLinearRing(pol_seq), NULL);
+
+        std::ostringstream tmp;
         for(int j=0;j < p->num_edges; j++)
         {
-            if(p->edges_direction_wheight[j]>0.0)
+            //p->edges[j]->dump();
+            //cout << "area:"<< pol->getArea() << endl;
+
+            LineString * ls=factory.createLineString( p->edges[j]->getCoordinateSequence());
+            //without the next line, gives segmentation fault....
+            tmp << "PM LS:" << ls->getPrecisionModel()->toString() << "PM Pol:" << pol->getPrecisionModel()->toString() << endl;
+            Geometry * g = pol->intersection(ls);
+
+
+
+            //cout << "type:" << g->getGeometryType() << " length:" <<  g->getLength() << endl;
+
+            //p->edges_direction_wheight[j]=(rand()%10)-5;
+            if(g->getLength()!=0)
             {
-                 p->edges_similarity[j]=p->edges_distances[j];
+                Coordinate edge_start_point=g->getCoordinates()->front();
+                Coordinate edge_end_point=g->getCoordinates()->back();
+                p->edges_distance_to_start_point[j]=c_after.distance(edge_start_point)-c_before.distance(edge_start_point);
+                p->edges_distance_to_end_point[j]=c_after.distance(edge_end_point)-c_before.distance(edge_end_point);
+                p->edges_direction_wheight[j]=(p->edges_distance_to_start_point[j]-p->edges_distance_to_end_point[j])/radius;
             }
             else
             {
-                p->edges_similarity[j]=p->edges_distances[j]*2;
+                p->edges_direction_wheight[j]=0;
             }
         }
     }
+}
+/* third version of the algorithm: check the direction of the next and before points*/
+void GCPointsTrack::wheightDirection3(GCRoadNetwork * rn)
+{
+        for(int i=1; i<points->size()-1; i++)
+        {
+            Coordinate c_before =  Coordinate(points->at(i-1)->x,points->at(i-1)->y);
+            Coordinate c_middle = Coordinate(points->at(i)->x,points->at(i)->y);
+            Coordinate c_after = Coordinate(points->at(i+1)->x,points->at(i+1)->y);
+            GCPoint * p = points->at(i);
+            for(int j=0;j < p->num_edges; j++)
+            {
+                CoordinateSequence * seq = p->edges[j]->getCoordinateSequence();
+                float c_before_min_dist=999999;
+                float c_after_min_dist=999999;
+                int c_before_index=-1;
+                int c_after_index=-1;
 
+                for(int k=0; k<seq->getSize(); k++)
+                {
 
+                    float d_before=c_before.distance(seq->getAt(k));
+                    if(d_before < c_before_min_dist)
+                    {
+                        c_before_min_dist= d_before;
+                        c_before_index=k;
+                    }
+                    float d_after=c_after.distance(seq->getAt(k));
+                    if(d_after < c_after_min_dist)
+                    {
+                        c_after_min_dist= d_after;
+                        c_after_index=k;
+                    }
+                }
+
+                float sim;
+                if(c_before_index<c_after_index)
+                {
+                    sim=1.0;
+                }
+                else if((c_before_index==c_after_index))
+                {
+                    float delta_start=c_after.distance(seq->getAt(0)) - c_before.distance(seq->getAt(0));
+                    float delta_end=c_after.distance(seq->getAt(seq->size()-1)) - c_before.distance(seq->getAt(seq->size()-1));
+
+                    if(delta_start > delta_end)
+                    {
+
+                        sim=1.0;
+                    }
+                    else
+                    {
+                        sim=0.0;
+                    }
+                }
+                else
+                {
+                    sim=0.0;
+                }
+
+                //TODO: take the dist into account;
+                GeometryFactory factory;
+                float d1=p->edges[j]->getGeometry()->distance(factory.createPoint(c_before));
+                float d2=p->edges[j]->getGeometry()->distance(factory.createPoint(c_middle));
+                float d3=p->edges[j]->getGeometry()->distance(factory.createPoint(c_after));
+
+                sim=sim*(min(min(d1,d2),d3)/((d1+d2+d3)/3.0));
+
+                //cout <<"sim="<<sim<< ";c_before_index=" << c_before_index << ";c_after_index=" << c_after_index\
+                 << ";c_before_min_dist=" << c_before_min_dist << ";c_after_min_dist=" << c_after_min_dist << endl;
+                p->edges_direction_wheight[j]=sim;
+            }
+        }
 }
 
 void GCPointsTrack::computeSpeed()
@@ -164,23 +268,32 @@ void GCPointsTrack::computeSpeed()
             int delta_t=(points->at(i+1)->id)-(points->at(i-1)->id);
             points->at(i)->speed=(dist/(float)delta_t)*3.6;
         }
-        
+
 }
 
 
 void GCPointsTrack::wheightAdjacency(GCRoadNetwork * rn)
 {
-    //TODO
+
 }
 
 void GCPointsTrack::computeSimilarity(GCRoadNetwork * rn)
 {
+
+    for(int i=0; i<points->size(); i++)
+    {
+        GCPoint * p = points->at(i);
+        for(int j=0;j < p->num_edges; j++)
+        {
+            p->edges_similarity[j]=(1.0/p->edges_distances[j])*(p->edges_direction_wheight[j]);
+        }
+    }
         for(int i=0; i<points->size(); i++)
         {
-            float best=999999;
+            float best=-999999;
             for(int j=0;j < points->at(i)->num_edges; j++)
             {
-                if(points->at(i)->edges_similarity[j]<best)
+                if(points->at(i)->edges_similarity[j]>best)
                 {
                     best=points->at(i)->edges_similarity[j];
                     points->at(i)->edge= (points->at(i))->edges_ids[j];

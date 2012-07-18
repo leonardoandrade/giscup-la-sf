@@ -19,7 +19,6 @@ GCPoint::GCPoint(int _id, double _x, double _y)
         this->edges_adjacent_similarity[i]=-99.0;
         this->edges_similarity[i]=-99.0;
         this->edges_confidence[i]=1.0;
-
         this->edges_distance_to_start_point[i]=-99.0;
         this->edges_distance_to_end_point[i]=-99.0;
     }
