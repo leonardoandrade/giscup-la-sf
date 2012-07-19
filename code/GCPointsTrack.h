@@ -14,6 +14,7 @@ class GCPointsTrack
         void wheightDirection2(GCRoadNetwork * rn);
         void wheightDirection3(GCRoadNetwork * rn);
         void wheightAdjacency(GCRoadNetwork * rn);
+        void smoothSimilarity(GCRoadNetwork * rn, int iterations);
         void computeSimilarity(GCRoadNetwork * rn);
         void computeSpeed();
         int  numberPoints();

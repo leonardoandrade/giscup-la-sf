@@ -25,11 +25,9 @@ class GCPoint
         int   edges_ids[EVALUATED_EDGES];
         float edges_distances[EVALUATED_EDGES];
         float edges_direction_wheight[EVALUATED_EDGES];
-        float edges_adjacent_similarity[EVALUATED_EDGES];
+        float edges_adjacency_weight[EVALUATED_EDGES];
         float edges_similarity[EVALUATED_EDGES];
         float edges_confidence[EVALUATED_EDGES];
-        float edges_distance_to_start_point[EVALUATED_EDGES];
-        float edges_distance_to_end_point[EVALUATED_EDGES];
         GCEdge * edges[EVALUATED_EDGES];
 };
 

@@ -16,11 +16,9 @@ GCPoint::GCPoint(int _id, double _x, double _y)
         this->edges_ids[i]=-1;
         this->edges_distances[i]=-99.0;
         this->edges_direction_wheight[i]=-99.0;
-        this->edges_adjacent_similarity[i]=-99.0;
+        this->edges_adjacency_weight[i]=1.0;
         this->edges_similarity[i]=-99.0;
         this->edges_confidence[i]=1.0;
-        this->edges_distance_to_start_point[i]=-99.0;
-        this->edges_distance_to_end_point[i]=-99.0;
     }
 }
 
@@ -41,7 +39,7 @@ string GCPoint::toStr()
         ret << "[edge #" << i << " id:" << this->edges_ids[i]\
          << " dst:" << this->edges_distances[i]\
          << " dir:" << this->edges_direction_wheight[i]\
-         << " adj:" << this->edges_adjacent_similarity[i]\
+         << " adj:" << this->edges_adjacency_weight[i]\
          << " sim:" << this->edges_similarity[i] <<  "]";
     }
     return ret.str();

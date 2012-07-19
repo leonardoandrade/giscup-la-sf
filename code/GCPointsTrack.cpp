@@ -125,9 +125,8 @@ void GCPointsTrack::wheightDirection(GCRoadNetwork * rn)
             //cout << "\t" << p->edges[j]->getId() << endl;
             Coordinate edge_start_point=p->edges[j]->getStartPoint();
             Coordinate edge_end_point=p->edges[j]->getEndPoint();
-            p->edges_distance_to_start_point[j]=c_after.distance(edge_start_point)-c_before.distance(edge_start_point);
-            p->edges_distance_to_end_point[j]=c_after.distance(edge_end_point)-c_before.distance(edge_end_point);
-            p->edges_direction_wheight[j]=(p->edges_distance_to_start_point[j]-p->edges_distance_to_end_point[j])/p->edges[j]->getLength();
+
+            p->edges_direction_wheight[j]=(c_after.distance(edge_start_point)-c_before.distance(edge_start_point)-c_after.distance(edge_end_point)-c_before.distance(edge_end_point))/p->edges[j]->getLength();
         }
     }
 
@@ -175,9 +174,8 @@ void GCPointsTrack::wheightDirection2(GCRoadNetwork * rn)
             {
                 Coordinate edge_start_point=g->getCoordinates()->front();
                 Coordinate edge_end_point=g->getCoordinates()->back();
-                p->edges_distance_to_start_point[j]=c_after.distance(edge_start_point)-c_before.distance(edge_start_point);
-                p->edges_distance_to_end_point[j]=c_after.distance(edge_end_point)-c_before.distance(edge_end_point);
-                p->edges_direction_wheight[j]=(p->edges_distance_to_start_point[j]-p->edges_distance_to_end_point[j])/radius;
+
+                p->edges_direction_wheight[j]=(c_after.distance(edge_start_point)-c_before.distance(edge_start_point)-c_after.distance(edge_end_point)-c_before.distance(edge_end_point))/p->edges[j]->getLength();
             }
             else
             {
@@ -245,7 +243,7 @@ void GCPointsTrack::wheightDirection3(GCRoadNetwork * rn)
                     sim=0.0;
                 }
 
-                //TODO: take the dist into account;
+
                 GeometryFactory factory;
                 float d1=p->edges[j]->getGeometry()->distance(factory.createPoint(c_before));
                 float d2=p->edges[j]->getGeometry()->distance(factory.createPoint(c_middle));
@@ -277,6 +275,37 @@ void GCPointsTrack::wheightAdjacency(GCRoadNetwork * rn)
 
 }
 
+
+void GCPointsTrack::smoothSimilarity(GCRoadNetwork * rn, int iterations)
+{
+    this->computeSimilarity(rn);
+
+    for(int x=0; x<iterations;x++)
+    {
+
+        for(int i=1; i<points->size()-1; i++)
+        {
+            GCPoint * p_before = points->at(i-1);
+            GCPoint * p = points->at(i);
+            GCPoint * p_after = points->at(i+1);
+            for(int j=0;j < p->num_edges; j++)
+            {
+                if(p->edges_ids[j]==p_before->edge)
+                {
+                    p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]*1.1;
+                }
+                if(p->edges_ids[j]==p_after->edge)
+                {
+                    p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]*1.1;
+                }
+                p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]/1.20;
+            }
+        }
+        this->computeSimilarity(rn);
+    }
+}
+
+
 void GCPointsTrack::computeSimilarity(GCRoadNetwork * rn)
 {
 
@@ -285,7 +314,7 @@ void GCPointsTrack::computeSimilarity(GCRoadNetwork * rn)
         GCPoint * p = points->at(i);
         for(int j=0;j < p->num_edges; j++)
         {
-            p->edges_similarity[j]=(1.0/p->edges_distances[j])*(p->edges_direction_wheight[j]);
+            p->edges_similarity[j]=(1.0/p->edges_distances[j])*(p->edges_direction_wheight[j])*(p->edges_adjacency_weight[j]);
         }
     }
         for(int i=0; i<points->size(); i++)
