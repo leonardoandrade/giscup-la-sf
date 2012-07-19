@@ -1,0 +1,31 @@
+CC=cl
+LIBS=lib\geos.lib lib\proj.lib
+OBJS=GCPoint.obj GCEdge.obj GCDataUtils.obj GCRoadNetwork.obj GCPointsTrack.obj
+HEADERS=GCDataUtils.h  GCEdge.h  GC.h  GCPoint.h  GCPointsTrack.h  GCRoadNetwork.h
+FLAGS=/MD /EHsc -I..\geos-3.3.5\include -I..\proj-4.8.0\src -I"C:\Program Files\Microsoft Visual Studio 9.0\VC\include" -I"C:\Program Files\Microsoft SDKs\Windows\v7.1\Include"
+
+GEOS_INCLUDE = 
+
+GCPointsTrack.obj: GCPointsTrack.cpp GCPointsTrack.h
+	$(CC) $(FLAGS)  -c GCPointsTrack.cpp /FoGCPointsTrack.obj
+
+GCPoint.obj: GCPoint.cpp GCPoint.h
+	$(CC) $(FLAGS) -c GCPoint.cpp /FoGCPoint.obj
+
+GCEdge.obj: GCEdge.cpp GCEdge.h
+	$(CC) $(FLAGS) -c GCEdge.cpp /FoGCEdge.obj
+
+GCDataUtils.obj: GCDataUtils.cpp GCDataUtils.h
+	$(CC) $(FLAGS) -c GCDataUtils.cpp /FoGCDataUtils.obj
+
+GCRoadNetwork.obj: GCRoadNetwork.cpp GCRoadNetwork.h 
+	$(CC) $(FLAGS) -c GCRoadNetwork.cpp /FoGCRoadNetwork.obj
+
+mapmatch.exe: $(OBJS) main.cpp
+	$(CC) main.cpp  $(OBJS) $(LIBS) $(FLAGS) /Fomapmatch.obj
+
+all: mapmatch.exe
+
+clean: 
+	del *.obj
+	del *.exe
