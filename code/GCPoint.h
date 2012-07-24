@@ -19,6 +19,7 @@ class GCPoint
         double x;
         double y;
         int edge;
+        GCEdge * edge_obj;
         float confidence;
         int num_edges;
         float speed;
@@ -29,6 +30,7 @@ class GCPoint
         float edges_similarity[EVALUATED_EDGES];
         float edges_confidence[EVALUATED_EDGES];
         GCEdge * edges[EVALUATED_EDGES];
+        GCEdge * best_edge;
 };
 
 #endif

@@ -81,7 +81,7 @@ int main(int argc, char ** argv)
         pt->findNearestEdges(rn);
         pt->computeSpeed();
         pt->wheightDirection3(rn);
-        pt->smoothSimilarity(rn, 100);
+        pt->smoothSimilarity(rn, 200);
         pt->computeSimilarity(rn);
         //pt->wheightAdjacency(rn);
         //pt->computeSimilarity(rn);

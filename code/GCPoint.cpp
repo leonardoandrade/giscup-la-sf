@@ -9,15 +9,16 @@ GCPoint::GCPoint(int _id, double _x, double _y)
     x=_x;
     y=_y;
     edge=-1; //initialize as an invalid edge
-    confidence=0.0;
+    best_edge=NULL;
+    confidence=1.0;
     speed=0.0;
     for(int i =0; i< EVALUATED_EDGES; i++)
     {
         this->edges_ids[i]=-1;
-        this->edges_distances[i]=-99.0;
-        this->edges_direction_wheight[i]=-99.0;
-        this->edges_adjacency_weight[i]=1.0;
-        this->edges_similarity[i]=-99.0;
+        this->edges_distances[i]=10000;
+        this->edges_direction_wheight[i]=0.0;
+        this->edges_adjacency_weight[i]=0.0;
+        this->edges_similarity[i]=0.0;
         this->edges_confidence[i]=1.0;
     }
 }

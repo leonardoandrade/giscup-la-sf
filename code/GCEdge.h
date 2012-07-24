@@ -40,12 +40,13 @@ class GCEdge
         Coordinate getStartPoint();
         Coordinate getEndPoint();
         CoordinateSequence * getCoordinateSequence();
+        int startnode;
+        int endnode;
 
     private:
         int id;
         float length;
-        int startnode;
-        int endnode;
+
         float cost;
         string name;
         string type;

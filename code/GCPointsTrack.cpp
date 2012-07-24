@@ -283,11 +283,13 @@ void GCPointsTrack::smoothSimilarity(GCRoadNetwork * rn, int iterations)
     for(int x=0; x<iterations;x++)
     {
 
-        for(int i=1; i<points->size()-1; i++)
+        for(int i=2; i<points->size()-2; i++)
         {
+            //GCPoint * p_before_2 = points->at(i-2);
             GCPoint * p_before = points->at(i-1);
             GCPoint * p = points->at(i);
             GCPoint * p_after = points->at(i+1);
+            //GCPoint * p_after_2 = points->at(i+2);
             for(int j=0;j < p->num_edges; j++)
             {
                 if(p->edges_ids[j]==p_before->edge)
@@ -298,7 +300,31 @@ void GCPointsTrack::smoothSimilarity(GCRoadNetwork * rn, int iterations)
                 {
                     p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]*1.1;
                 }
-                p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]/1.20;
+                if((p->edges_ids[j]!=p_before->edge)&& (p->edges[j]->startnode!=(p_before->best_edge->endnode)))
+                {
+                     cout << "smoth1" << endl;
+                     p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]*0.5;
+                }
+
+                cout  <<  " : " <<  p->edges_ids[j] <<  " : "  <<  p_after->edge <<  " : " << p->edges[j]->endnode <<  " : "  << p_after->best_edge->startnode << endl;
+
+                if((p->edges_ids[j]!=p_after->edge)&& (p->edges[j]->endnode!=(p_after->best_edge->startnode)))
+                {
+                    cout << "smoth2" << endl;
+                     p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]*0.5;
+                }
+                /*
+                if(p->edges_ids[j]==p_before_2->edge)
+                {
+                    p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]*1.1;
+                }
+                if(p->edges_ids[j]==p_after_2->edge)
+                {
+                    p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]*1.1;
+                }
+                */
+
+                //p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j];
             }
         }
         this->computeSimilarity(rn);
@@ -308,27 +334,36 @@ void GCPointsTrack::smoothSimilarity(GCRoadNetwork * rn, int iterations)
 
 void GCPointsTrack::computeSimilarity(GCRoadNetwork * rn)
 {
-
+    //
+    //cout << "number points:" <<  points->size() << endl;
     for(int i=0; i<points->size(); i++)
     {
+
         GCPoint * p = points->at(i);
         for(int j=0;j < p->num_edges; j++)
         {
-            p->edges_similarity[j]=(1.0/p->edges_distances[j])*(p->edges_direction_wheight[j])*(p->edges_adjacency_weight[j]);
+            p->edges_similarity[j]=((1.0/(p->edges_distances[j]+1.0))*0.96)+((p->edges_direction_wheight[j])*0.02)+((p->edges_adjacency_weight[j])*0.02);
+            //p->edges_similarity[j]=((1.0/p->edges_distances[j])*p->edges_direction_wheight[j]*p->edges_adjacency_weight[j]);
+            //cout << "sim:" <<  p->edges_similarity[j] << endl;
+            p->confidence=1.0;
         }
+
     }
         for(int i=0; i<points->size(); i++)
         {
             float best=-999999;
+            //cout << "num_edges:" << points->at(i)->num_edges << endl;
             for(int j=0;j < points->at(i)->num_edges; j++)
             {
+                //cout << "sim2:" << points->at(i)->edges_similarity[j] << "best:" << best << endl;
                 if(points->at(i)->edges_similarity[j]>best)
                 {
                     best=points->at(i)->edges_similarity[j];
-                    points->at(i)->edge= (points->at(i))->edges_ids[j];
+                    points->at(i)->edge = (points->at(i))->edges_ids[j];
+                    points->at(i)->best_edge=(points->at(i))->edges[j];
                 }
 
             }
-            points->at(i)->confidence=1.0;
+            (points->at(i))->confidence=1.0;
         }
 }
