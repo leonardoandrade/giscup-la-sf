@@ -287,7 +287,163 @@ void GCPointsTrack::computeSpeed()
         }
 }
 
+void GCPointsTrack::weightTopology()
+{
 
+
+    /*load terminal points with values to propagate*/
+    /*
+    GCPoint * p_initial = points->at(0);
+    GCPoint * p_final = points->at(points->size()-1);
+    for(int j=0;j <p_initial->num_edges; j++)
+    {
+        p_initial->edges_adjacency_weight[j]=points->size();
+    }
+
+    for(int j=0;j <p_final->num_edges; j++)
+    {
+        p_final->edges_adjacency_weight[j]=points->size();
+    }
+*/
+    /* the iterations */
+  //  for(int iter=0; iter<points->size()/2; iter++)
+    //{
+
+
+    /*forward motion*/
+    for(int i=0; i<points->size()-2; i++)
+    {
+
+        GCPoint * p = points->at(i);
+        GCPoint * p_after = points->at(i+1);
+        GCPoint * p_after_2 = points->at(i+2);
+        /*normalization*/
+        /*
+        float max_w=0.0;
+        for(int j=0;j < p->num_edges; j++)
+        {
+            if(max_w<p->edges_adjacency_weight[j]){ max_w=p->edges_adjacency_weight[j]; }
+        }
+        for(int j=0;j < p->num_edges; j++)
+        {
+            p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]/max_w;
+        }
+*/
+        /*the forward propagation*/
+        for(int j=0;j < p->num_edges; j++)
+        {
+
+            float topo_weight=(p->edges_distances[j] * eval_params->b_distance)+\
+            (p->edges_direction_weight[j]*eval_params->b_direction)+(p->edges_adjacency_weight[j]*eval_params->b_adjacency);
+            for(int k=0; k <  p_after->num_edges; k++)
+            {
+                if(p->edges[j]->getId()==p_after->edges[k]->getId())
+                {
+                    p_after->edges_adjacency_weight[k]=p_after->edges_adjacency_weight[k]+\
+                    (topo_weight/EVALUATED_EDGES);
+                }
+                else if((p->edges[j]->getId()!=p_after->edges[k]->getId()) && (p->edges[j]->endnode == p_after->edges[k]->startnode))
+                {
+                    p_after->edges_adjacency_weight[k]=p_after->edges_adjacency_weight[k]+\
+                    (topo_weight/EVALUATED_EDGES);
+
+                }
+            }
+
+            for(int k=0; k <  p_after_2->num_edges; k++)
+            {
+                if(p->edges[j]->getId()==p_after_2->edges[k]->getId())
+                {
+                    p_after_2->edges_adjacency_weight[k]=p_after_2->edges_adjacency_weight[k]+\
+                    (topo_weight/(EVALUATED_EDGES));
+                }
+                else if((p->edges[j]->getId()!=p_after_2->edges[k]->getId()) && (p->edges[j]->endnode == p_after_2->edges[k]->startnode))
+                {
+                    p_after_2->edges_adjacency_weight[k]=p_after_2->edges_adjacency_weight[k]+\
+                    (topo_weight/(EVALUATED_EDGES));
+
+                }
+            }
+
+
+            p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]/(EVALUATED_EDGES*2);
+        }
+    }
+
+    /*backward motion*/
+    for(int i=i<points->size(); i>1; i--)
+    {
+
+        GCPoint * p = points->at(i);
+        GCPoint * p_before = points->at(i-1);
+        GCPoint * p_before_2 = points->at(i-2);
+        /*normalization*/
+        /*
+        float max_w=0.0;
+        for(int j=0;j < p->num_edges; j++)
+        {
+            if(max_w<p->edges_adjacency_weight[j]){ max_w=p->edges_adjacency_weight[j]; }
+        }
+        for(int j=0;j < p->num_edges; j++)
+        {
+            p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]/max_w;
+        }
+*/
+        /*the backward propagation*/
+        for(int j=0;j < p->num_edges; j++)
+        {
+            float topo_weight=(p->edges_distances[j] * eval_params->b_distance)\
+            +(p->edges_direction_weight[j]*eval_params->b_direction)+(p->edges_adjacency_weight[j]*eval_params->b_adjacency);
+
+            for(int k=0; k <  p_before->num_edges; k++)
+            {
+                if(p->edges[j]->getId()==p_before->edges[k]->getId())
+                {
+                    p_before->edges_adjacency_weight[k]=p_before->edges_adjacency_weight[k]+\
+                    (topo_weight/EVALUATED_EDGES);
+                }
+                else if((p->edges[j]->getId()!=p_before->edges[k]->getId()) && (p->edges[j]->startnode == p_before->edges[k]->endnode))
+                {
+                    p_before->edges_adjacency_weight[k]=p_before->edges_adjacency_weight[k]+\
+                    (topo_weight/EVALUATED_EDGES);
+                }
+            }
+
+            for(int k=0; k <  p_before_2->num_edges; k++)
+            {
+                if(p->edges[j]->getId()==p_before_2->edges[k]->getId())
+                {
+                    p_before_2->edges_adjacency_weight[k]=p_before_2->edges_adjacency_weight[k]+\
+                    (topo_weight/(EVALUATED_EDGES));
+                }
+                else if((p->edges[j]->getId()!=p_before_2->edges[k]->getId()) && (p->edges[j]->startnode == p_before_2->edges[k]->endnode))
+                {
+                    p_before_2->edges_adjacency_weight[k]=p_before_2->edges_adjacency_weight[k]+\
+                    (topo_weight/(EVALUATED_EDGES));
+                }
+            }
+
+
+            p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]/(EVALUATED_EDGES*2);
+        }
+    //}//iterations
+    }
+    /*normalization in the end */
+    for(int i=0; i<points->size(); i++)
+    {
+        float max_w=0.01;
+        GCPoint * p = points->at(i);
+        for(int j=0;j < p->num_edges; j++)
+        {
+            //cout << p->edges_adjacency_weight[j] << endl;
+            if(max_w<p->edges_adjacency_weight[j]){ max_w=p->edges_adjacency_weight[j]; }
+        }
+        for(int j=0;j < p->num_edges; j++)
+        {
+            p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]/max_w;
+        }
+    }
+}
 
 
 
@@ -413,11 +569,12 @@ void GCPointsTrack::normalizeValues()
         for(int j=0;j < p->num_edges; j++)
         {
 
-            p->edges_distances[j]=p->edges_distances[j]*p->edges_distances[j]; // squaring the distance
+            //p->edges_distances[j]=p->edges_distances[j]*p->edges_distances[j]; // squaring the distance
             if(p->edges_distances[j]>max_dist)
             {
                 max_dist=p->edges_distances[j];
             }
+
             if(p->edges_direction_weight[j]>max_direction)
             {
                 max_direction=p->edges_direction_weight[j];

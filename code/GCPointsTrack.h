@@ -14,6 +14,7 @@ class GCPointsTrack
         void weightDirection2(GCRoadNetwork * rn);
         void weightDirection3(GCRoadNetwork * rn);
         void smoothSimilarity(GCRoadNetwork * rn, int iterations);
+        void weightTopology();
         void computeSimilarity(GCRoadNetwork * rn);
         void normalizeValues();
         void computeSpeed();

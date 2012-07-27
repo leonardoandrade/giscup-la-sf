@@ -100,7 +100,10 @@ int main(int argc, char ** argv)
         pt->computeSpeed();
         pt->weightDirection3(rn);
         pt->normalizeValues();
-        pt->smoothSimilarity(rn, 1000);
+        //pt->smoothSimilarity(rn, 1000);
+        pt->normalizeValues();
+        pt->weightTopology();
+
         pt->computeSimilarity(rn);
         //pt->weightAdjacency(rn);
         //pt->computeSimilarity(rn);
