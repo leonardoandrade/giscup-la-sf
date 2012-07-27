@@ -340,12 +340,12 @@ void GCPointsTrack::weightTopology()
                 if(p->edges[j]->getId()==p_after->edges[k]->getId())
                 {
                     p_after->edges_adjacency_weight[k]=p_after->edges_adjacency_weight[k]+\
-                    (topo_weight/EVALUATED_EDGES);
+                    (topo_weight*eval_params->topology_adjacent_accessible);
                 }
                 else if((p->edges[j]->getId()!=p_after->edges[k]->getId()) && (p->edges[j]->endnode == p_after->edges[k]->startnode))
                 {
                     p_after->edges_adjacency_weight[k]=p_after->edges_adjacency_weight[k]+\
-                    (topo_weight/EVALUATED_EDGES);
+                    (topo_weight*eval_params->topology_adjacent_accessible);
 
                 }
             }
@@ -355,18 +355,18 @@ void GCPointsTrack::weightTopology()
                 if(p->edges[j]->getId()==p_after_2->edges[k]->getId())
                 {
                     p_after_2->edges_adjacency_weight[k]=p_after_2->edges_adjacency_weight[k]+\
-                    (topo_weight/(EVALUATED_EDGES));
+                    (topo_weight*eval_params->topology_adjacent_same_edge);
                 }
                 else if((p->edges[j]->getId()!=p_after_2->edges[k]->getId()) && (p->edges[j]->endnode == p_after_2->edges[k]->startnode))
                 {
                     p_after_2->edges_adjacency_weight[k]=p_after_2->edges_adjacency_weight[k]+\
-                    (topo_weight/(EVALUATED_EDGES));
+                    (topo_weight*eval_params->topology_adjacent_same_edge);
 
                 }
             }
 
 
-            p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]/(EVALUATED_EDGES*2);
+            p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]/(eval_params->topology_adjacent_same_streetname);
         }
     }
 
@@ -400,12 +400,12 @@ void GCPointsTrack::weightTopology()
                 if(p->edges[j]->getId()==p_before->edges[k]->getId())
                 {
                     p_before->edges_adjacency_weight[k]=p_before->edges_adjacency_weight[k]+\
-                    (topo_weight/EVALUATED_EDGES);
+                    (topo_weight*eval_params->topology_adjacent_accessible);
                 }
                 else if((p->edges[j]->getId()!=p_before->edges[k]->getId()) && (p->edges[j]->startnode == p_before->edges[k]->endnode))
                 {
                     p_before->edges_adjacency_weight[k]=p_before->edges_adjacency_weight[k]+\
-                    (topo_weight/EVALUATED_EDGES);
+                    (topo_weight*eval_params->topology_adjacent_accessible);
                 }
             }
 
@@ -414,17 +414,17 @@ void GCPointsTrack::weightTopology()
                 if(p->edges[j]->getId()==p_before_2->edges[k]->getId())
                 {
                     p_before_2->edges_adjacency_weight[k]=p_before_2->edges_adjacency_weight[k]+\
-                    (topo_weight/(EVALUATED_EDGES));
+                    (topo_weight*eval_params->topology_adjacent_same_edge);
                 }
                 else if((p->edges[j]->getId()!=p_before_2->edges[k]->getId()) && (p->edges[j]->startnode == p_before_2->edges[k]->endnode))
                 {
                     p_before_2->edges_adjacency_weight[k]=p_before_2->edges_adjacency_weight[k]+\
-                    (topo_weight/(EVALUATED_EDGES));
+                    (topo_weight*eval_params->topology_adjacent_same_edge);
                 }
             }
 
 
-            p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]/(EVALUATED_EDGES*2);
+            p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]/(eval_params->topology_adjacent_same_streetname);
         }
     //}//iterations
     }
@@ -570,6 +570,7 @@ void GCPointsTrack::normalizeValues()
         {
 
             //p->edges_distances[j]=p->edges_distances[j]*p->edges_distances[j]; // squaring the distance
+
             if(p->edges_distances[j]>max_dist)
             {
                 max_dist=p->edges_distances[j];
