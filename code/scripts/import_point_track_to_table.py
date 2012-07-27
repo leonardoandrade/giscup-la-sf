@@ -24,6 +24,6 @@ if __name__=='__main__':
     conn.query("BEGIN WORK")
     for line in node_output_file:
         tok=line.split(",")
-        conn.query("update "+table+" set edge='"+tok[1]+"', confidence='"+tok[2]+"', speed='"+tok[3]+"', comments='"+tok[4]+"'  where id = "+tok[0]+"")
+        conn.query("update "+table+" set edge='"+tok[1]+"', confidence='"+tok[2]+"', speed='"+tok[3]+"', comments='"+tok[4].replace("[","\n[")+"'  where id = "+tok[0]+"")
     conn.query("END WORK")
 

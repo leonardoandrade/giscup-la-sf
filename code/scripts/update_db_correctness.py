@@ -18,8 +18,9 @@ if __name__=='__main__':
     conn.query("BEGIN WORK")
     for line in node_input_file:
         tok=line.split(",")
-        conn.query("update "+table+" set correct = (edge='"+tok[1]+"') where id="+tok[0])
+        conn.query("update "+table+" set correct = (edge='"+tok[1]+"'), right_edge='"+tok[1]+"' where id="+tok[0])
         if count%100==0:
+        
             conn.query("END WORK")
             conn.query("BEGIN WORK")
     conn.query("END WORK")            

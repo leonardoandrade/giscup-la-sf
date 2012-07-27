@@ -37,6 +37,8 @@
 		<Unit filename="GCDataUtils.h" />
 		<Unit filename="GCEdge.cpp" />
 		<Unit filename="GCEdge.h" />
+		<Unit filename="GCEvalParams.cpp" />
+		<Unit filename="GCEvalParams.h" />
 		<Unit filename="GCPoint.cpp" />
 		<Unit filename="GCPoint.h" />
 		<Unit filename="GCPointsTrack.cpp" />

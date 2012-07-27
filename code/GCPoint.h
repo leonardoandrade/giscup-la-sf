@@ -3,7 +3,7 @@
 #ifndef GCPOINT_H
 #define GCPOINT_H
 #include <iostream>
-#define EVALUATED_EDGES 5
+#define EVALUATED_EDGES 6
 using namespace std;
 class GCPoint
 {
@@ -25,7 +25,7 @@ class GCPoint
         float speed;
         int   edges_ids[EVALUATED_EDGES];
         float edges_distances[EVALUATED_EDGES];
-        float edges_direction_wheight[EVALUATED_EDGES];
+        float edges_direction_weight[EVALUATED_EDGES];
         float edges_adjacency_weight[EVALUATED_EDGES];
         float edges_similarity[EVALUATED_EDGES];
         float edges_confidence[EVALUATED_EDGES];

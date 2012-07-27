@@ -17,8 +17,7 @@ GCEdge::GCEdge(int _id, string _name, string _type, float _length,  int _startno
 GCEdge::~GCEdge()
 {
     delete seq;
-    delete geometry;
-
+    //delete geometry;
 }
 
 Coordinate GCEdge::getStartPoint()
@@ -30,6 +29,10 @@ Coordinate GCEdge::getEndPoint()
 {
     return this->end_point;
 }
+
+
+
+
 
 void GCEdge::addPoint(float x, float y)
 {

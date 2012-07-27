@@ -14,10 +14,6 @@ projPJ pj_4326, pj_900913;
 
 void convert_latlon_to_google_mercator(const double lat,  const double lon, double * x, double * y)
 {
-
-
-
-
     *x=lon;
     *y=lat;
     //cout << "lat:" << lat << " lon:" << lon << " x:" << *x << " y:" << *y << endl;
@@ -31,7 +27,6 @@ void convert_latlon_to_google_mercator(const double lat,  const double lon, doub
 vector<string> split_line(const char *str, char c = ' ')
 {
     vector<string> result;
-
     while(1)
     {
         const char *begin = str;
@@ -48,7 +43,7 @@ vector<string> split_line(const char *str, char c = ' ')
 }
 
 
-void GCDataUtils::CreateRoadNetworkFromEdgeFile(GCRoadNetwork * rn, const string file_path, const bool convert_to_google_mercator)
+void GCDataUtils::CreateRoadNetworkFromEdgeFile(GCRoadNetwork * rn, const string file_path,  const string start_end_nodes_filename, const bool convert_to_google_mercator)
 {
     if (!(pj_4326 = pj_init_plus("+proj=longlat +ellps=WGS84 +datum=WGS84")))
     {
@@ -101,12 +96,41 @@ void GCDataUtils::CreateRoadNetworkFromEdgeFile(GCRoadNetwork * rn, const string
             //cout << line << endl
         }
         myfile.close();
+
     }
     else
     {
       cout << "Unable to open file";
       return;
     }
+
+
+    /*now, the start and end nodes file*/
+    ifstream myfile2(start_end_nodes_filename.c_str());
+    if(myfile2.is_open())
+    {
+        int count_lines=0;
+        while ( myfile2.good() )
+        {
+            getline (myfile2,line);
+            //cout << line << endl;
+            vector<string> tok=split_line(line.c_str(),' ');
+            if(tok.size()<4)
+            {
+                break;
+            }
+            rn->setStartEndNodeForEdge(atoi(tok[0].c_str()), atoi(tok[1].c_str()), atoi(tok[2].c_str()));
+            count_lines++;
+
+        }
+        myfile2.close();
+    }
+    else
+    {
+      cout << "Unable to open file";
+      return;
+    }
+
 }
 
 
@@ -191,6 +215,7 @@ void GCDataUtils::CreatePointsTrackFromFile(GCPointsTrack * pt, const string fil
         }
     }
     myfile.close();
+
 }
 
 void GCDataUtils::WritePointsTrackToFile(GCPointsTrack * pt, const string file_name)

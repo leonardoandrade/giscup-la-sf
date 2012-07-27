@@ -10,12 +10,19 @@ GCRoadNetwork::GCRoadNetwork()
 
 GCRoadNetwork::~GCRoadNetwork()
 {
+    for(int i=0; i<edges->size(); i++)
+    {
+        GCEdge * e = edges->at(i);
+        delete e;
+    }
     delete edges;
+    delete rtree;
 }
 
 void GCRoadNetwork::addEdge(GCEdge * e)
 {
     edges->push_back(e);
+    edges_map[e->getId()]=e;
 }
 
 void GCRoadNetwork::indexEdges()
@@ -41,6 +48,12 @@ void GCRoadNetwork::indexEdges()
 */
     }
 
+}
+
+void GCRoadNetwork::setStartEndNodeForEdge(int index, int start, int end)
+{
+    edges_map[index]->startnode=start;
+    edges_map[index]->endnode=end;
 }
 
 void GCRoadNetwork::dump()
@@ -92,6 +105,10 @@ vector <GCEdge*>  GCRoadNetwork::findEdgesByRadius(GCPoint * p, int radius)
 */
 
     //cout << "# edges matched:" << ret.size() << endl;
+    delete pol;
+    delete wkt_writer;
+
+
     return ret;
 }
 

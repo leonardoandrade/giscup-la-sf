@@ -11,6 +11,7 @@
 #include <fstream>
 #include <string>
 
+//#define MONTE_CARLO_MODE 1
 
 // for operation timming
 double diffclock(clock_t clock1,clock_t clock2)
@@ -33,19 +34,26 @@ int main(int argc, char ** argv)
 
     // Load Road Network to memory
     ostringstream edge_file_path;
+    ostringstream edge_start_end_nodes_file_path;
     edge_file_path << argv[1] << "/WA_EdgeGeometry.txt";
+    edge_start_end_nodes_file_path << argv[1] << "/WA_Edges.txt";
     cout << "Loading road network from file" << edge_file_path.str() << endl;
     clock_t begin=clock();
 
     GCRoadNetwork * rn=new GCRoadNetwork();
-    GCDataUtils::CreateRoadNetworkFromEdgeFile(rn, edge_file_path.str(), true);
+    GCDataUtils::CreateRoadNetworkFromEdgeFile(rn, edge_file_path.str(), edge_start_end_nodes_file_path.str(), true);
     rn->indexEdges();
     //GCDataUtils::WriteRoadNetworkToSQLFile(rn,"/tmp/boda.txt");
 
 	clock_t end=clock();
 	cout << rn->numberEdges() << " edges loaded in " << double(diffclock(end,begin)) << " seconds"<< endl;
 
+#ifdef MONTE_CARLO_MODE
+    while(1)
+    {
+        int x=system("python scripts/generate_random_params_alt.py > params.txt");
 
+#endif
 
     //Load the inputs
      clock_t begin_classification  =clock();
@@ -73,30 +81,49 @@ int main(int argc, char ** argv)
         }
         clock_t begin=clock();
 
-        cout << "Processing input in file " << input_file_path.str() << endl;
+        //cout << "Processing input in file " << input_file_path.str() << endl;
         GCPointsTrack * pt = new GCPointsTrack();
         GCDataUtils::CreatePointsTrackFromFile(pt, input_file_path.str(), true);
+
+        GCEvalParams * ep = new GCEvalParams();
+
+
+#ifdef MONTE_CARLO_MODE
+        ep->loadFromFile("params.txt");
+#endif
+
+        pt->setEvalParams(ep);
+
 
         //doing the classification
         pt->findNearestEdges(rn);
         pt->computeSpeed();
-        pt->wheightDirection3(rn);
-        pt->smoothSimilarity(rn, 200);
+        pt->weightDirection3(rn);
+        pt->normalizeValues();
+        pt->smoothSimilarity(rn, 1000);
         pt->computeSimilarity(rn);
-        //pt->wheightAdjacency(rn);
+        //pt->weightAdjacency(rn);
         //pt->computeSimilarity(rn);
+
 
 
         GCDataUtils::WritePointsTrackToFile(pt,output_file_path.str());
         clock_t end=clock();
-        cout << pt->numberPoints() << " points processed in " << double(diffclock(end,begin)) << " seconds"<< endl;
+        //cout << pt->numberPoints() << " points processed in " << double(diffclock(end,begin)) << " seconds"<< endl;
 
+
+        delete pt;
+        delete ep;
     }
     end=clock();
-    cout <<  "point track classification in " << double(diffclock(end,begin_classification)) << " seconds"<< endl;
-	cout <<  "total process in " << double(diffclock(end,begin)) << " seconds"<< endl;
+    cout <<  "point track classification in " << double(diffclock(end,begin_classification)) << " seconds ("<< double(diffclock(end,begin)) << " s. )" << endl;
 
+#ifdef MONTE_CARLO_MODE
 
+    int y=system("sh eval_params_and_percent_to_csv.sh");
+
+    } //end while(1)
+#endif
 /*
     cout << "loading to file" << endl;
     GCDataUtils::WriteNetworkToSQLFile(rn,"giscup.txt");
@@ -114,4 +141,7 @@ int main(int argc, char ** argv)
     e->buildGeometry();
     e->dump();
     */
+
+    delete rn; //to keep valgrind happy
+
 }

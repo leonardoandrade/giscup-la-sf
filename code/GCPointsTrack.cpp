@@ -6,7 +6,7 @@
 #include "geos/geom/GeometryFactory.h"
 #include "geos/geom/PrecisionModel.h"
 #include <math.h>
-
+#include <string.h>
 #include <sstream>
 
 using namespace std;
@@ -23,7 +23,17 @@ GCPointsTrack::GCPointsTrack()
 
 GCPointsTrack::~GCPointsTrack()
 {
+    for(int i =0; i<points->size(); i++)
+    {
+        GCPoint * p = points->at(i);
+        delete p;
+    }
     delete points;
+}
+
+void GCPointsTrack::setEvalParams(GCEvalParams * ep)
+{
+    eval_params=ep;
 }
 
 int GCPointsTrack::numberPoints()
@@ -59,7 +69,7 @@ void GCPointsTrack::findNearestEdges(GCRoadNetwork * rn)
 {
 
 
-    cout << "processing track with  " << points->size() << " points" << endl;
+    //cout << "processing track with  " << points->size() << " points" << endl;
     for(int i=0; i<points->size(); i++)
     {
         //cout << "processing point "<< i << "/" << points->size() << endl;
@@ -92,7 +102,7 @@ void GCPointsTrack::findNearestEdges(GCRoadNetwork * rn)
         for(int i=0; i < p->num_edges; i++)
         {
 
-            p->edges_distances[i]=eedd[i].distance;
+            p->edges_distances[i]=1.0/(eedd[i].distance+1.0);
             p->edges_ids[i]=eedd[i].edge->getId();
             p->edges[i]=eedd[i].edge;
         }
@@ -110,7 +120,7 @@ void GCPointsTrack::findNearestEdges(GCRoadNetwork * rn)
 }
 
 
-void GCPointsTrack::wheightDirection(GCRoadNetwork * rn)
+void GCPointsTrack::weightDirection(GCRoadNetwork * rn)
 {
 
     //computing the direction of the point sequence
@@ -126,7 +136,7 @@ void GCPointsTrack::wheightDirection(GCRoadNetwork * rn)
             Coordinate edge_start_point=p->edges[j]->getStartPoint();
             Coordinate edge_end_point=p->edges[j]->getEndPoint();
 
-            p->edges_direction_wheight[j]=(c_after.distance(edge_start_point)-c_before.distance(edge_start_point)-c_after.distance(edge_end_point)-c_before.distance(edge_end_point))/p->edges[j]->getLength();
+            p->edges_direction_weight[j]=(c_after.distance(edge_start_point)-c_before.distance(edge_start_point)-c_after.distance(edge_end_point)-c_before.distance(edge_end_point))/p->edges[j]->getLength();
         }
     }
 
@@ -134,7 +144,7 @@ void GCPointsTrack::wheightDirection(GCRoadNetwork * rn)
 
 /*second version of the algoritm: weight direction by interception */
 
-void GCPointsTrack::wheightDirection2(GCRoadNetwork * rn)
+void GCPointsTrack::weightDirection2(GCRoadNetwork * rn)
 {
     float radius=300.0;
     for(int i=1; i<points->size()-1; i++)
@@ -169,23 +179,23 @@ void GCPointsTrack::wheightDirection2(GCRoadNetwork * rn)
 
             //cout << "type:" << g->getGeometryType() << " length:" <<  g->getLength() << endl;
 
-            //p->edges_direction_wheight[j]=(rand()%10)-5;
+            //p->edges_direction_weight[j]=(rand()%10)-5;
             if(g->getLength()!=0)
             {
                 Coordinate edge_start_point=g->getCoordinates()->front();
                 Coordinate edge_end_point=g->getCoordinates()->back();
 
-                p->edges_direction_wheight[j]=(c_after.distance(edge_start_point)-c_before.distance(edge_start_point)-c_after.distance(edge_end_point)-c_before.distance(edge_end_point))/p->edges[j]->getLength();
+                p->edges_direction_weight[j]=(c_after.distance(edge_start_point)-c_before.distance(edge_start_point)-c_after.distance(edge_end_point)-c_before.distance(edge_end_point))/p->edges[j]->getLength();
             }
             else
             {
-                p->edges_direction_wheight[j]=0;
+                p->edges_direction_weight[j]=0;
             }
         }
     }
 }
 /* third version of the algorithm: check the direction of the next and before points*/
-void GCPointsTrack::wheightDirection3(GCRoadNetwork * rn)
+void GCPointsTrack::weightDirection3(GCRoadNetwork * rn)
 {
         for(int i=1; i<points->size()-1; i++)
         {
@@ -245,15 +255,24 @@ void GCPointsTrack::wheightDirection3(GCRoadNetwork * rn)
 
 
                 GeometryFactory factory;
-                float d1=p->edges[j]->getGeometry()->distance(factory.createPoint(c_before));
-                float d2=p->edges[j]->getGeometry()->distance(factory.createPoint(c_middle));
-                float d3=p->edges[j]->getGeometry()->distance(factory.createPoint(c_after));
+                Point * p1=factory.createPoint(c_before);
+                float d1=p->edges[j]->getGeometry()->distance(p1);
+                Point * p2=factory.createPoint(c_middle);
+                float d2=p->edges[j]->getGeometry()->distance(p2);
+                Point * p3=factory.createPoint(c_after);
+                float d3=p->edges[j]->getGeometry()->distance(p3);
+
+
+                delete p1;
+                delete p2;
+                delete p3;
 
                 sim=sim*(min(min(d1,d2),d3)/((d1+d2+d3)/3.0));
 
-                //cout <<"sim="<<sim<< ";c_before_index=" << c_before_index << ";c_after_index=" << c_after_index\
+
+                //cout << i <<" sim="<<sim<< ";c_before_index=" << c_before_index << ";c_after_index=" << c_after_index\
                  << ";c_before_min_dist=" << c_before_min_dist << ";c_after_min_dist=" << c_after_min_dist << endl;
-                p->edges_direction_wheight[j]=sim;
+                p->edges_direction_weight[j]=sim;
             }
         }
 }
@@ -266,71 +285,152 @@ void GCPointsTrack::computeSpeed()
             int delta_t=(points->at(i+1)->id)-(points->at(i-1)->id);
             points->at(i)->speed=(dist/(float)delta_t)*3.6;
         }
-
 }
 
 
-void GCPointsTrack::wheightAdjacency(GCRoadNetwork * rn)
-{
 
-}
 
 
 void GCPointsTrack::smoothSimilarity(GCRoadNetwork * rn, int iterations)
 {
     this->computeSimilarity(rn);
-
     for(int x=0; x<iterations;x++)
     {
-
         for(int i=2; i<points->size()-2; i++)
         {
-            //GCPoint * p_before_2 = points->at(i-2);
+            GCPoint * p_before_2 = points->at(i-2);
             GCPoint * p_before = points->at(i-1);
             GCPoint * p = points->at(i);
             GCPoint * p_after = points->at(i+1);
-            //GCPoint * p_after_2 = points->at(i+2);
+            GCPoint * p_after_2 = points->at(i+2);
+
+
             for(int j=0;j < p->num_edges; j++)
             {
+
+                /*
                 if(p->edges_ids[j]==p_before->edge)
                 {
-                    p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]*1.1;
-                }
-                if(p->edges_ids[j]==p_after->edge)
-                {
-                    p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]*1.1;
-                }
-                if((p->edges_ids[j]!=p_before->edge)&& (p->edges[j]->startnode!=(p_before->best_edge->endnode)))
-                {
-                     cout << "smoth1" << endl;
-                     p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]*0.5;
+                    p->edges_adjacency_weight[j]=1.0;
                 }
 
-                cout  <<  " : " <<  p->edges_ids[j] <<  " : "  <<  p_after->edge <<  " : " << p->edges[j]->endnode <<  " : "  << p_after->best_edge->startnode << endl;
-
-                if((p->edges_ids[j]!=p_after->edge)&& (p->edges[j]->endnode!=(p_after->best_edge->startnode)))
+                else if((p->edges_ids[j]!=p_before->edge) && (p->edges[j]->startnode==(p_before->best_edge->endnode)))
                 {
-                    cout << "smoth2" << endl;
-                     p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]*0.5;
+                     p->edges_adjacency_weight[j]=1.0;
                 }
-                /*
-                if(p->edges_ids[j]==p_before_2->edge)
+                else if((p->edges_ids[j]!=p_before->edge) && (p->edges[j]->startnode!=(p_before->best_edge->endnode)))
                 {
-                    p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]*1.1;
-                }
-                if(p->edges_ids[j]==p_after_2->edge)
-                {
-                    p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]*1.1;
+                    p->edges_adjacency_weight[j]=0.0;
                 }
                 */
 
-                //p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j];
+
+
+
+                if(p->edges_ids[j]==p_before->edge)
+                {
+                    p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]+eval_params->topology_adjacent_same_edge;
+                }
+                if(p->edges_ids[j]==p_after->edge)
+                {
+                    p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]+eval_params->topology_adjacent_same_edge;
+                }
+
+                if(p->edges_ids[j]==p_before_2->edge)
+                {
+                    p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]+eval_params->topology_adjacent_same_edge;
+                }
+                if(p->edges_ids[j]==p_after_2->edge)
+                {
+                    p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]+eval_params->topology_adjacent_same_edge;
+                }
+
+
+
+
+                if((p->edges_ids[j]!=p_before->edge) && (p->edges[j]->startnode==(p_before->best_edge->endnode)))
+                {
+                     p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]+eval_params->topology_adjacent_accessible;
+                }
+
+                if((p->edges_ids[j]!=p_after->edge) && (p->edges[j]->endnode==(p_after->best_edge->startnode)))
+                {
+                     p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]+eval_params->topology_adjacent_accessible;
+                }
+
+
+                /*
+                if(strcmp(p->edges[j]->getName().c_str(), p_before->best_edge->getName().c_str())==0)
+                {
+                    p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]+tmp_adj*eval_params->topology_adjacent_same_streetname;
+                }
+                if(strcmp(p->edges[j]->getName().c_str(), p_after->best_edge->getName().c_str())==0)
+                {
+                    p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]+tmp_adj*eval_params->topology_adjacent_same_streetname;
+                }
+                */
+
+
+                /*normalizing by maximum possible*/
+                /*
+                p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]/\
+                pow(((eval_params->topology_adjacent_same_edge*eval_params->topology_adjacent_accessible*eval_params->topology_adjacent_same_streetname)),2);
+                */
+
+
             }
+            /*normalizing by maximum value*/
+            float max_val=0.0;
+            for(int j=0;j < p->num_edges; j++)
+            {
+                if(p->edges_adjacency_weight[j]>max_val)
+                {
+                    max_val=p->edges_adjacency_weight[j];
+                }
+            }
+
+            for(int j=0;j < p->num_edges; j++)
+            {
+               p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]/max_val;
+            }
+
         }
+
+
         this->computeSimilarity(rn);
     }
 }
+void GCPointsTrack::normalizeValues()
+{
+    for(int i=0; i<points->size(); i++)
+    {
+        GCPoint * p = points->at(i);
+        float max_dist=0.01; //the problem of division by zero
+        float max_direction=0.01;
 
+
+
+        for(int j=0;j < p->num_edges; j++)
+        {
+
+            p->edges_distances[j]=p->edges_distances[j]*p->edges_distances[j]; // squaring the distance
+            if(p->edges_distances[j]>max_dist)
+            {
+                max_dist=p->edges_distances[j];
+            }
+            if(p->edges_direction_weight[j]>max_direction)
+            {
+                max_direction=p->edges_direction_weight[j];
+            }
+
+        }
+        for(int j=0;j < p->num_edges; j++)
+        {
+            p->edges_distances[j]=p->edges_distances[j]/max_dist;
+            p->edges_direction_weight[j]=p->edges_direction_weight[j]/max_direction;
+        }
+    }
+}
 
 void GCPointsTrack::computeSimilarity(GCRoadNetwork * rn)
 {
@@ -342,8 +442,18 @@ void GCPointsTrack::computeSimilarity(GCRoadNetwork * rn)
         GCPoint * p = points->at(i);
         for(int j=0;j < p->num_edges; j++)
         {
-            p->edges_similarity[j]=((1.0/(p->edges_distances[j]+1.0))*0.96)+((p->edges_direction_wheight[j])*0.02)+((p->edges_adjacency_weight[j])*0.02);
-            //p->edges_similarity[j]=((1.0/p->edges_distances[j])*p->edges_direction_wheight[j]*p->edges_adjacency_weight[j]);
+            p->edges_similarity[j]=(((p->edges_distances[j]) * eval_params->b_distance)+\
+                                    ((p->edges_direction_weight[j])  * eval_params->b_direction)+\
+                                    ((p->edges_adjacency_weight[j])  * eval_params->b_adjacency));
+/*
+            p->edges_similarity[j]=((p->edges_distances[j]) / eval_params->b_distance)*\
+                                    ((p->edges_direction_weight[j])  / eval_params->b_direction)*\
+                                    ((p->edges_adjacency_weight[j])  / eval_params->b_adjacency));
+*/
+
+            //cout << "sim:" <<  p->edges_similarity[j] << "eval params: " << eval_params->toStr() << endl;
+
+            //p->edges_similarity[j]=((1.0/p->edges_distances[j])*p->edges_direction_weight[j]*p->edges_adjacency_weight[j]);
             //cout << "sim:" <<  p->edges_similarity[j] << endl;
             p->confidence=1.0;
         }

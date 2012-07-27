@@ -1,8 +1,11 @@
 CC=g++
 LIBS=/usr/lib/libproj.a /usr/lib/libgeos.a
-OBJS=GCPoint.o GCEdge.o GCDataUtils.o GCRoadNetwork.o GCPointsTrack.o
+OBJS=GCPoint.o GCEdge.o GCDataUtils.o GCRoadNetwork.o GCPointsTrack.o GCEvalParams.o
 HEADERS=GCDataUtils.h  GCEdge.h  GC.h  GCPoint.h  GCPointsTrack.h  GCRoadNetwork.h
-FLAGS=-g
+FLAGS=-O1
+
+GCEvalParams.o: GCEvalParams.cpp GCEvalParams.h
+	$(CC) $(FLAGS)  -c GCEvalParams.cpp -o GCEvalParams.o
 
 GCPointsTrack.o: GCPointsTrack.cpp GCPointsTrack.h
 	$(CC) $(FLAGS)  -c GCPointsTrack.cpp -o GCPointsTrack.o

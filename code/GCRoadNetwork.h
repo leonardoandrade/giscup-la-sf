@@ -10,6 +10,7 @@
 #include "geos/geom/Envelope.h"
 #include "geos/index/strtree/STRtree.h"
 #include "geos/index/ItemVisitor.h"
+#include <map>
 
 
 using namespace std;
@@ -27,10 +28,13 @@ class GCRoadNetwork
         void dump();
         int numberEdges();
         vector <GCEdge*>  findEdgesByRadius(GCPoint * p, int radius);
+        void setStartEndNodeForEdge(int index, int start, int end);
         GCEdge * getEdgeAt(int idx);
     private:
         vector <GCEdge*> * edges;
         geos::index::strtree::STRtree * rtree;
+        map <int, GCEdge*> edges_map;
+
 };
 
 #endif
