@@ -47,13 +47,16 @@ if __name__=='__main__':
         dir_test=sys.argv[3]
         fs=sorted([f for f in os.listdir(dir_ground_truth) if f[-4:]=='.txt'])
         sum_percent=0.0
+        sum_official=0
         count=0
         for f in fs:
             (percent, official, total_points) = evaluate_file(dir_ground_truth+"/"+f , dir_test+"/"+f)
-            print "eval for file '"+f+"' is ",round(percent,2),"%"
+            print "eval for file '"+f+"' is ",round(percent,2),"% official=",official
             count=count+1
             sum_percent=sum_percent+percent
+            sum_official=sum_official+official
         print "average_percent=",round(sum_percent/float(count),2),"%"
+        print "sum_official=",sum_official
     else:
         print "command '"+command+"' not recognized" 
         sys.exit(0)

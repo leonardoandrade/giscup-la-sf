@@ -77,7 +77,7 @@ void GCPointsTrack::findNearestEdges(GCRoadNetwork * rn)
         //int n_edges=rn->numberEdges();
         //int closest_edge_id=-99;
         //float closest_edge_distance=9999999999.0;
-        vector <GCEdge*> ee = rn->findEdgesByRadius(p,300);
+        vector <GCEdge*> ee = rn->findEdgesByRadius(p,100);
 
 
 
@@ -102,7 +102,7 @@ void GCPointsTrack::findNearestEdges(GCRoadNetwork * rn)
         for(int i=0; i < p->num_edges; i++)
         {
 
-            p->edges_distances[i]=1.0/(eedd[i].distance+1.0);
+            p->edges_distances[i]=10.0/(eedd[i].distance+5);
             p->edges_ids[i]=eedd[i].edge->getId();
             p->edges[i]=eedd[i].edge;
         }
@@ -295,7 +295,7 @@ void GCPointsTrack::computeSpeed()
             points->at(i)->speed=min((float)60.0,points->at(i)->speed)/60.0;
         }
 
-	
+
 }
 
 void GCPointsTrack::weightTopology()
@@ -303,7 +303,7 @@ void GCPointsTrack::weightTopology()
 
 
     /*load terminal points with values to propagate*/
-    
+
     GCPoint * p_initial = points->at(0);
     GCPoint * p_final = points->at(points->size()-1);
     for(int j=0;j <p_initial->num_edges; j++)
@@ -317,29 +317,19 @@ void GCPointsTrack::weightTopology()
     }
 
     /* the iterations */
-    for(int iter=0; iter<points->size(); iter++)
-    {
+    //for(int iter=0; iter<points->size(); iter++)
+    //{
 
 
     /*forward motion*/
-    for(int i=0; i<points->size()-2; i++)
+    //for(int i=0; i<min((int)points->size()-2, iter+2); i++)
+    for(int i=0; i<(int)points->size()-2; i++)
     {
 
         GCPoint * p = points->at(i);
         GCPoint * p_after = points->at(i+1);
         GCPoint * p_after_2 = points->at(i+2);
-        /*normalization*/
-        /*
-        float max_w=0.0;
-        for(int j=0;j < p->num_edges; j++)
-        {
-            if(max_w<p->edges_adjacency_weight[j]){ max_w=p->edges_adjacency_weight[j]; }
-        }
-        for(int j=0;j < p->num_edges; j++)
-        {
-            p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]/max_w;
-        }
-*/
+
         /*the forward propagation*/
         for(int j=0;j < p->num_edges; j++)
         {
@@ -348,58 +338,42 @@ void GCPointsTrack::weightTopology()
             (p->edges_direction_weight[j]*eval_params->b_direction)+(p->edges_adjacency_weight[j]*eval_params->b_adjacency);
             for(int k=0; k <  p_after->num_edges; k++)
             {
-                if(p->edges[j]->getId()==p_after->edges[k]->getId())
+                if((p->edges[j]->getId()==p_after->edges[k]->getId()) ||\
+                    ((p->edges[j]->getId()!=p_after->edges[k]->getId()) && (p->edges[j]->endnode == p_after->edges[k]->startnode)))
                 {
                     p_after->edges_adjacency_weight[k]=p_after->edges_adjacency_weight[k]+\
                     (topo_weight*eval_params->topology_adjacent_accessible);
                 }
-                else if((p->edges[j]->getId()!=p_after->edges[k]->getId()) && (p->edges[j]->endnode == p_after->edges[k]->startnode))
-                {
-                    p_after->edges_adjacency_weight[k]=p_after->edges_adjacency_weight[k]+\
-                    (topo_weight*eval_params->topology_adjacent_accessible);
 
-                }
             }
 
             for(int k=0; k <  p_after_2->num_edges; k++)
             {
-                if(p->edges[j]->getId()==p_after_2->edges[k]->getId())
-                {
-                    p_after_2->edges_adjacency_weight[k]=p_after_2->edges_adjacency_weight[k]+\
-                    (topo_weight*eval_params->topology_adjacent_same_edge);
-                }
-                else if((p->edges[j]->getId()!=p_after_2->edges[k]->getId()) && (p->edges[j]->endnode == p_after_2->edges[k]->startnode))
-                {
-                    p_after_2->edges_adjacency_weight[k]=p_after_2->edges_adjacency_weight[k]+\
-                    (topo_weight*eval_params->topology_adjacent_same_edge);
+                 if((p->edges[j]->getId()==p_after_2->edges[k]->getId()) ||\
+                    ((p->edges[j]->getId()!=p_after_2->edges[k]->getId()) && (p->edges[j]->endnode == p_after_2->edges[k]->startnode)))
 
+                {
+                    p_after_2->edges_adjacency_weight[k]=p_after_2->edges_adjacency_weight[k]+\
+                    (topo_weight*eval_params->topology_adjacent_same_edge);
                 }
+
             }
 
 
-            p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]/(eval_params->topology_adjacent_same_streetname);
+            p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]*(eval_params->topology_adjacent_same_streetname);
+            //cout << "FW iter=" <<"" << " i=" << i << " j=" << j << " adj=" << p->edges_adjacency_weight[j] << endl;
         }
     }
 
     /*backward motion*/
-    for(int i=i<points->size(); i>1; i--)
+    //for(int i=points->size()-1; i> max(2,((int)points->size()-iter-2)); i--)
+    for(int i=points->size()-1; i> 1; i--)
     {
 
         GCPoint * p = points->at(i);
         GCPoint * p_before = points->at(i-1);
         GCPoint * p_before_2 = points->at(i-2);
-        /*normalization*/
-        /*
-        float max_w=0.0;
-        for(int j=0;j < p->num_edges; j++)
-        {
-            if(max_w<p->edges_adjacency_weight[j]){ max_w=p->edges_adjacency_weight[j]; }
-        }
-        for(int j=0;j < p->num_edges; j++)
-        {
-            p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]/max_w;
-        }
-*/
+
         /*the backward propagation*/
         for(int j=0;j < p->num_edges; j++)
         {
@@ -408,12 +382,8 @@ void GCPointsTrack::weightTopology()
 
             for(int k=0; k <  p_before->num_edges; k++)
             {
-                if(p->edges[j]->getId()==p_before->edges[k]->getId())
-                {
-                    p_before->edges_adjacency_weight[k]=p_before->edges_adjacency_weight[k]+\
-                    (topo_weight*eval_params->topology_adjacent_accessible);
-                }
-                else if((p->edges[j]->getId()!=p_before->edges[k]->getId()) && (p->edges[j]->startnode == p_before->edges[k]->endnode))
+                if((p->edges[j]->getId()==p_before->edges[k]->getId()) ||\
+                    ((p->edges[j]->getId()!=p_before->edges[k]->getId()) && (p->edges[j]->startnode == p_before->edges[k]->endnode)))
                 {
                     p_before->edges_adjacency_weight[k]=p_before->edges_adjacency_weight[k]+\
                     (topo_weight*eval_params->topology_adjacent_accessible);
@@ -422,22 +392,20 @@ void GCPointsTrack::weightTopology()
 
             for(int k=0; k <  p_before_2->num_edges; k++)
             {
-                if(p->edges[j]->getId()==p_before_2->edges[k]->getId())
+                if((p->edges[j]->getId()==p_before_2->edges[k]->getId()) ||\
+                    ((p->edges[j]->getId()!=p_before_2->edges[k]->getId()) && (p->edges[j]->startnode == p_before_2->edges[k]->endnode)))
                 {
                     p_before_2->edges_adjacency_weight[k]=p_before_2->edges_adjacency_weight[k]+\
                     (topo_weight*eval_params->topology_adjacent_same_edge);
                 }
-                else if((p->edges[j]->getId()!=p_before_2->edges[k]->getId()) && (p->edges[j]->startnode == p_before_2->edges[k]->endnode))
-                {
-                    p_before_2->edges_adjacency_weight[k]=p_before_2->edges_adjacency_weight[k]+\
-                    (topo_weight*eval_params->topology_adjacent_same_edge);
-                }
+
             }
 
 
-            p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]/(eval_params->topology_adjacent_same_streetname);
+            p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]*(eval_params->topology_adjacent_same_streetname);
+            //cout << "BK iter=" << "" << " i=" << i << " j=" << j << " adj=" << p->edges_adjacency_weight[j] << endl;
         }
-    }//iterations
+    //}//iterations
     }
     /*normalization in the end */
     for(int i=0; i<points->size(); i++)
@@ -581,7 +549,7 @@ void GCPointsTrack::normalizeValues()
         {
 
             //p->edges_distances[j]=p->edges_distances[j]*p->edges_distances[j]; // squaring the distance
-
+            //p->edges_distances[j]=p->edges_distances[j]+5;
             if(p->edges_distances[j]>max_dist)
             {
                 max_dist=p->edges_distances[j];
@@ -601,6 +569,40 @@ void GCPointsTrack::normalizeValues()
     }
 }
 
+
+void GCPointsTrack::computeConfidence()
+{
+    for(int i=0; i<points->size(); i++)
+    {
+         GCPoint * p = points->at(i);
+         p->confidence=1.0;
+         if(p->speed<0.0)
+         {
+                p->confidence=0.0;
+         }
+
+    }
+
+}
+
+void GCPointsTrack::snapValues()
+{
+    for(int i=0; i<points->size(); i++)
+    {
+        GCPoint * p = points->at(i);
+        for(int j=0;j < p->num_edges; j++)
+        {
+            if(p->edges_distances[j]>0.3)
+            {
+                p->edges_distances[j]=1.0;
+            }
+            if(p->edges_direction_weight[j]>0.6)
+            {
+                p->edges_direction_weight[j]=1.0;
+            }
+        }
+    }
+}
 void GCPointsTrack::computeSimilarity(GCRoadNetwork * rn)
 {
     //

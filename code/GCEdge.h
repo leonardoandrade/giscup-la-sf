@@ -20,12 +20,10 @@ class GCEdge
 {
     public:
         GCEdge();
-        GCEdge(int _id,  string _name, string _type,  float _length, int _startnode, int _endnode, float _cost);
+        GCEdge(int _id,   float _length, int _startnode, int _endnode, float _cost);
         ~GCEdge();
         void setId(int);
-        void setName(string);
-        string getName();
-        string getType();
+
         string getWKT();
         int getId();
         void addPoint(float x, float y);
@@ -47,9 +45,8 @@ class GCEdge
         int id;
         float length;
 
-        float cost;
-        string name;
-        string type;
+
+
         LineString * geometry;
         CoordinateArraySequence * seq;
         Coordinate start_point;

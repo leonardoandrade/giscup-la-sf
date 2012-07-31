@@ -66,7 +66,7 @@ void GCDataUtils::CreateRoadNetworkFromEdgeFile(GCRoadNetwork * rn, const string
             {
                 continue;
             }
-            GCEdge * e=new GCEdge(atoi(tok[0].c_str()), tok[1], tok[2], atof(tok[3].c_str()), 0, 0 , 0);
+            GCEdge * e=new GCEdge(atoi(tok[0].c_str()), atof(tok[3].c_str()), 0, 0 , 0);
             for(int i=4; i<tok.size();i+=2)
             {
                 double * x=new double(atof(tok[i+1].c_str()));
@@ -152,9 +152,9 @@ void  GCDataUtils::WriteRoadNetworkToSQLFile( GCRoadNetwork * rn, const string f
     {
         tmp="insert into t_giscup_edge(name, type, the_geom) values('%s', '%s', st_setsrid('%s',900913))\n";
         e = rn->getEdgeAt(i);
-        name=e->getName();
+
         replace(name.begin(), name.end(), '\'', ' ');
-        sprintf (sql, tmp.c_str(), name.c_str(), e->getType().c_str(), e->getWKT().c_str());
+        sprintf (sql, tmp.c_str(), "", "", e->getWKT().c_str());
         f << sql;
 
         if(i%COMMIT_INTERVAL==0)
@@ -233,8 +233,8 @@ void GCDataUtils::WritePointsTrackToFile(GCPointsTrack * pt, const string file_n
         line.setf(ios::fixed);
 
         GCPoint * p = pt->getPointAt(i);
-        line << p->id << "," << p->edge << "," << 1.0 << "," << p->speed << "," << p->toStr();
-        //cout << p->id << "," << p->edge << "," << p->confidence << endl;
+        //line << p->id << "," << p->edge << "," << p->confidence << "," << p->speed << "," << p->toStr();
+        line << p->id << "," << p->edge << "," << p->confidence << endl;
         f << line.str() << endl;
     }
     f.close();

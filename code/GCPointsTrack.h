@@ -18,6 +18,8 @@ class GCPointsTrack
         void computeSimilarity(GCRoadNetwork * rn);
         void normalizeValues();
         void computeSpeed();
+        void snapValues();
+        void computeConfidence();
         int  numberPoints();
         void setEvalParams(GCEvalParams * ep);
         GCPoint * getPointAt(int idx);

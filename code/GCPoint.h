@@ -28,7 +28,6 @@ class GCPoint
         float edges_direction_weight[EVALUATED_EDGES];
         float edges_adjacency_weight[EVALUATED_EDGES];
         float edges_similarity[EVALUATED_EDGES];
-        float edges_confidence[EVALUATED_EDGES];
         GCEdge * edges[EVALUATED_EDGES];
         GCEdge * best_edge;
 };

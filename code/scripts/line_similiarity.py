@@ -2,6 +2,11 @@ import pg
 
 conn=None
 
+
+def compute_similarity3(line_gid):
+    pass
+
+
 def compute_similarity2(line_gid):
     tmp=conn.query("select astext(st_pointn(the_geom,1)), astext(st_pointn(the_geom,2)), astext(st_pointn(the_geom,3)) from t_giscup_subline where gid='"+str(line_gid)+"' ").getresult()
     start_point=tmp[0][0]

@@ -7,8 +7,8 @@ GCEdge::GCEdge()
     seq=new CoordinateArraySequence();
 }
 
-GCEdge::GCEdge(int _id, string _name, string _type, float _length,  int _startnode, int _endnode, float _cost) :
- id(_id), name(_name), type(_type), startnode(_startnode), endnode(_endnode)
+GCEdge::GCEdge(int _id,  float _length,  int _startnode, int _endnode, float _cost) :
+ id(_id), startnode(_startnode), endnode(_endnode)
 {
      seq=new CoordinateArraySequence();
 }
@@ -56,10 +56,6 @@ int GCEdge::numberPoints()
 
 }
 
-string GCEdge::getName()
-{
-    return this->name;
-}
 
 int GCEdge::getId()
 {
@@ -67,10 +63,6 @@ int GCEdge::getId()
 }
 
 
-string GCEdge::getType()
-{
-    return this->type;
-}
 
 string  GCEdge::getWKT()
 {
@@ -78,6 +70,7 @@ string  GCEdge::getWKT()
     string wkt = wkt_writer->write(geometry);
     delete wkt_writer;
     return wkt;
+
 }
 
 void GCEdge::buildGeometry()
@@ -101,7 +94,7 @@ LineString * GCEdge::getGeometry()
 
 void GCEdge::dump()
 {
-    cout << "ID: "<< id << " name: " << name << "";
+    cout << "ID: "<< id;
     WKTWriter * wkt_writer=new WKTWriter();
     string wkt = wkt_writer->write(geometry);
     cout << "EDGE WKT= " << wkt << endl;

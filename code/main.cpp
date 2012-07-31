@@ -102,9 +102,11 @@ int main(int argc, char ** argv)
         pt->normalizeValues();
         //pt->smoothSimilarity(rn, 1000);
         pt->normalizeValues();
+        //pt->snapValues();
         pt->weightTopology();
 
         pt->computeSimilarity(rn);
+        pt->computeConfidence();
         //pt->weightAdjacency(rn);
         //pt->computeSimilarity(rn);
 
@@ -114,9 +116,11 @@ int main(int argc, char ** argv)
         clock_t end=clock();
         //cout << pt->numberPoints() << " points processed in " << double(diffclock(end,begin)) << " seconds"<< endl;
 
-
+#ifdef MONTE_CARLO_MODE
         delete pt;
         delete ep;
+#endif
+
     }
     end=clock();
     cout <<  "point track classification in " << double(diffclock(end,begin_classification)) << " seconds ("<< double(diffclock(end,begin)) << " s. )" << endl;
