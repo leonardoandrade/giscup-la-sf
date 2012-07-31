@@ -145,6 +145,6 @@ int main(int argc, char ** argv)
     e->dump();
     */
 
-    delete rn; //to keep valgrind happy
+    //delete rn; //to keep valgrind happy
 
 }

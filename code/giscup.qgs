@@ -1,13 +1,13 @@
 <!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
-<qgis projectname="" version="1.7.3-Wroclaw">
+<qgis projectname="" version="1.8.0-Lisboa">
     <title></title>
     <mapcanvas>
         <units>meters</units>
         <extent>
-            <xmin>-13606137.407690</xmin>
-            <ymin>6073740.244598</ymin>
-            <xmax>-13605742.770435</xmax>
-            <ymax>6073949.939842</ymax>
+            <xmin>-13609340.236153</xmin>
+            <ymin>6077856.572639</ymin>
+            <xmax>-13609137.781981</xmax>
+            <ymax>6077976.813278</ymax>
         </extent>
         <projections>0</projections>
         <destinationsrs>
@@ -23,76 +23,76 @@
             </spatialrefsys>
         </destinationsrs>
     </mapcanvas>
-    <legend>
-        <legendlayer open="true" checked="Qt::Checked" name="Track1 (correct)" showFeatureCount="0">
+    <legend updateDrawingOrder="true">
+        <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Track1 (correct)" showFeatureCount="0">
             <filegroup open="true" hidden="false">
                 <legendlayerfile isInOverview="0" layerid="t_giscup_track_point_120120715220322788" visible="1"/>
             </filegroup>
         </legendlayer>
-        <legendlayer open="false" checked="Qt::Unchecked" name="Track1 (speed)" showFeatureCount="0">
+        <legendlayer drawingOrder="-1" open="false" checked="Qt::Unchecked" name="Track1 (speed)" showFeatureCount="0">
             <filegroup open="false" hidden="false">
                 <legendlayerfile isInOverview="0" layerid="t_giscup_track_point_120120715215012293" visible="0"/>
             </filegroup>
         </legendlayer>
-        <legendlayer open="true" checked="Qt::Checked" name="t_giscup_track_point_2" showFeatureCount="0">
+        <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="t_giscup_track_point_2" showFeatureCount="0">
             <filegroup open="true" hidden="false">
                 <legendlayerfile isInOverview="0" layerid="t_giscup_track_point_220120715012826433" visible="1"/>
             </filegroup>
         </legendlayer>
-        <legendlayer open="false" checked="Qt::Unchecked" name="t_giscup_track_point_3" showFeatureCount="0">
+        <legendlayer drawingOrder="-1" open="false" checked="Qt::Unchecked" name="t_giscup_track_point_3" showFeatureCount="0">
             <filegroup open="false" hidden="false">
                 <legendlayerfile isInOverview="0" layerid="t_giscup_track_point_320120715013546405" visible="0"/>
             </filegroup>
         </legendlayer>
-        <legendlayer open="false" checked="Qt::Checked" name="t_giscup_edge" showFeatureCount="0">
+        <legendlayer drawingOrder="-1" open="false" checked="Qt::Checked" name="t_giscup_edge" showFeatureCount="0">
             <filegroup open="false" hidden="false">
                 <legendlayerfile isInOverview="0" layerid="t_giscup_edge20120714231322172" visible="1"/>
             </filegroup>
         </legendlayer>
         <legendgroup open="false" checked="Qt::Checked" name="Google-Rasters">
-            <legendlayer open="true" checked="Qt::Checked" name="google_z19" showFeatureCount="0">
+            <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="google_z19" showFeatureCount="0">
                 <filegroup open="true" hidden="false">
                     <legendlayerfile isInOverview="0" layerid="google_z1920120715212407916" visible="1"/>
                 </filegroup>
             </legendlayer>
-            <legendlayer open="true" checked="Qt::Checked" name="google_z18" showFeatureCount="0">
+            <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="google_z18" showFeatureCount="0">
                 <filegroup open="true" hidden="false">
                     <legendlayerfile isInOverview="0" layerid="google_z1820120715203532674" visible="1"/>
                 </filegroup>
             </legendlayer>
-            <legendlayer open="true" checked="Qt::Checked" name="google_z17" showFeatureCount="0">
+            <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="google_z17" showFeatureCount="0">
                 <filegroup open="true" hidden="false">
                     <legendlayerfile isInOverview="0" layerid="google_z1720120715203133804" visible="1"/>
                 </filegroup>
             </legendlayer>
-            <legendlayer open="true" checked="Qt::Checked" name="google_z16" showFeatureCount="0">
+            <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="google_z16" showFeatureCount="0">
                 <filegroup open="true" hidden="false">
                     <legendlayerfile isInOverview="0" layerid="google_z1620120715203014954" visible="1"/>
                 </filegroup>
             </legendlayer>
-            <legendlayer open="true" checked="Qt::Checked" name="google_z15" showFeatureCount="0">
+            <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="google_z15" showFeatureCount="0">
                 <filegroup open="true" hidden="false">
                     <legendlayerfile isInOverview="0" layerid="google_z1520120715202953882" visible="1"/>
                 </filegroup>
             </legendlayer>
-            <legendlayer open="true" checked="Qt::Checked" name="google_z14" showFeatureCount="0">
+            <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="google_z14" showFeatureCount="0">
                 <filegroup open="true" hidden="false">
                     <legendlayerfile isInOverview="0" layerid="google_z1420120716112357143" visible="1"/>
                 </filegroup>
             </legendlayer>
-            <legendlayer open="true" checked="Qt::Checked" name="google_z13" showFeatureCount="0">
+            <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="google_z13" showFeatureCount="0">
                 <filegroup open="true" hidden="false">
                     <legendlayerfile isInOverview="0" layerid="google_z1320120715202931106" visible="1"/>
                 </filegroup>
             </legendlayer>
         </legendgroup>
         <legendgroup open="true" checked="Qt::Unchecked" name="Line Sim test">
-            <legendlayer open="true" checked="Qt::Unchecked" name="t_giscup_subline" showFeatureCount="0">
+            <legendlayer drawingOrder="-1" open="true" checked="Qt::Unchecked" name="t_giscup_subline" showFeatureCount="0">
                 <filegroup open="true" hidden="false">
                     <legendlayerfile isInOverview="0" layerid="t_giscup_subline20120717131302944" visible="0"/>
                 </filegroup>
             </legendlayer>
-            <legendlayer open="true" checked="Qt::Unchecked" name="t_giscup_mainline" showFeatureCount="0">
+            <legendlayer drawingOrder="-1" open="true" checked="Qt::Unchecked" name="t_giscup_mainline" showFeatureCount="0">
                 <filegroup open="true" hidden="false">
                     <legendlayerfile isInOverview="0" layerid="t_giscup_mainline20120717131210137" visible="0"/>
                 </filegroup>
@@ -103,6 +103,8 @@
         <maplayer minimumScale="0" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
             <id>google_z1320120715202931106</id>
             <datasource>../raster/google_z13.tif</datasource>
+            <title></title>
+            <abstract></abstract>
             <layername>google_z13</layername>
             <srs>
                 <spatialrefsys>
@@ -159,6 +161,8 @@
         <maplayer minimumScale="0" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
             <id>google_z1420120716112357143</id>
             <datasource>../raster/google_z14.tif</datasource>
+            <title></title>
+            <abstract></abstract>
             <layername>google_z14</layername>
             <srs>
                 <spatialrefsys>
@@ -215,6 +219,8 @@
         <maplayer minimumScale="0" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
             <id>google_z1520120715202953882</id>
             <datasource>../raster/google_z15.tif</datasource>
+            <title></title>
+            <abstract></abstract>
             <layername>google_z15</layername>
             <srs>
                 <spatialrefsys>
@@ -271,6 +277,8 @@
         <maplayer minimumScale="0" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
             <id>google_z1620120715203014954</id>
             <datasource>../raster/google_z16.tif</datasource>
+            <title></title>
+            <abstract></abstract>
             <layername>google_z16</layername>
             <srs>
                 <spatialrefsys>
@@ -327,6 +335,8 @@
         <maplayer minimumScale="0" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
             <id>google_z1720120715203133804</id>
             <datasource>../raster/google_z17.tif</datasource>
+            <title></title>
+            <abstract></abstract>
             <layername>google_z17</layername>
             <srs>
                 <spatialrefsys>
@@ -383,6 +393,8 @@
         <maplayer minimumScale="0" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
             <id>google_z1820120715203532674</id>
             <datasource>../raster/google_z18.tif</datasource>
+            <title></title>
+            <abstract></abstract>
             <layername>google_z18</layername>
             <srs>
                 <spatialrefsys>
@@ -439,6 +451,8 @@
         <maplayer minimumScale="0" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
             <id>google_z1920120715212407916</id>
             <datasource>../raster/google_z19.tif</datasource>
+            <title></title>
+            <abstract></abstract>
             <layername>google_z19</layername>
             <srs>
                 <spatialrefsys>
@@ -495,6 +509,8 @@
         <maplayer minimumScale="0" maximumScale="100000" geometry="Line" type="vector" hasScaleBasedVisibilityFlag="1">
             <id>t_giscup_edge20120714231322172</id>
             <datasource>dbname='giscup' host=127.0.0.1 port=5432 user='leonardo' password='boda' sslmode=disable key='gid' table="t_giscup_edge" (the_geom) sql=</datasource>
+            <title></title>
+            <abstract></abstract>
             <layername>t_giscup_edge</layername>
             <srs>
                 <spatialrefsys>
@@ -594,6 +610,8 @@
         <maplayer minimumScale="0" maximumScale="1e+08" geometry="Line" type="vector" hasScaleBasedVisibilityFlag="0">
             <id>t_giscup_mainline20120717131210137</id>
             <datasource>dbname='giscup' host=127.0.0.1 port=5432 user='leonardo' password='boda' sslmode=disable key='gid' table="t_giscup_mainline" (the_geom) sql=</datasource>
+            <title></title>
+            <abstract></abstract>
             <layername>t_giscup_mainline</layername>
             <srs>
                 <spatialrefsys>
@@ -696,6 +714,8 @@
         <maplayer minimumScale="0" maximumScale="1e+08" geometry="Line" type="vector" hasScaleBasedVisibilityFlag="0">
             <id>t_giscup_subline20120717131302944</id>
             <datasource>dbname='giscup' host=127.0.0.1 port=5432 user='leonardo' password='boda' sslmode=disable key='gid' table="t_giscup_subline" (the_geom) sql=</datasource>
+            <title></title>
+            <abstract></abstract>
             <layername>t_giscup_subline</layername>
             <srs>
                 <spatialrefsys>
@@ -714,16 +734,16 @@
             <vectorjoins/>
             <renderer-v2 attr="similarity" symbollevels="0" type="graduatedSymbol">
                 <ranges>
-                    <range symbol="0" lower="0" upper="0.09915266068510001" label="0.0000 - 0.0992"/>
-                    <range symbol="1" lower="0.09915266068510001" upper="0.1983053213702" label="0.0992 - 0.1983"/>
-                    <range symbol="2" lower="0.1983053213702" upper="0.2974579820553001" label="0.1983 - 0.2975"/>
-                    <range symbol="3" lower="0.2974579820553001" upper="0.3966106427404" label="0.2975 - 0.3966"/>
-                    <range symbol="4" lower="0.3966106427404" upper="0.4957633034255" label="0.3966 - 0.4958"/>
-                    <range symbol="5" lower="0.4957633034255" upper="0.5949159641106" label="0.4958 - 0.5949"/>
-                    <range symbol="6" lower="0.5949159641106" upper="0.6940686247957" label="0.5949 - 0.6941"/>
-                    <range symbol="7" lower="0.6940686247957" upper="0.7932212854808" label="0.6941 - 0.7932"/>
-                    <range symbol="8" lower="0.7932212854808" upper="0.8923739461658999" label="0.7932 - 0.8924"/>
-                    <range symbol="9" lower="0.8923739461658999" upper="0.9915266068509999" label="0.8924 - 0.9915"/>
+                    <range symbol="0" lower="0" upper="0.0991527" label="0.0000 - 0.0992"/>
+                    <range symbol="1" lower="0.0991527" upper="0.198305" label="0.0992 - 0.1983"/>
+                    <range symbol="2" lower="0.198305" upper="0.297458" label="0.1983 - 0.2975"/>
+                    <range symbol="3" lower="0.297458" upper="0.396611" label="0.2975 - 0.3966"/>
+                    <range symbol="4" lower="0.396611" upper="0.495763" label="0.3966 - 0.4958"/>
+                    <range symbol="5" lower="0.495763" upper="0.594916" label="0.4958 - 0.5949"/>
+                    <range symbol="6" lower="0.594916" upper="0.694069" label="0.5949 - 0.6941"/>
+                    <range symbol="7" lower="0.694069" upper="0.793221" label="0.6941 - 0.7932"/>
+                    <range symbol="8" lower="0.793221" upper="0.892374" label="0.7932 - 0.8924"/>
+                    <range symbol="9" lower="0.892374" upper="0.991527" label="0.8924 - 0.9915"/>
                 </ranges>
                 <symbols>
                     <symbol outputUnit="MM" alpha="1" type="line" name="0">
@@ -908,6 +928,8 @@
         <maplayer minimumScale="0" maximumScale="1e+08" geometry="Point" type="vector" hasScaleBasedVisibilityFlag="0">
             <id>t_giscup_track_point_120120715215012293</id>
             <datasource>dbname='giscup' host=127.0.0.1 port=5432 user='leonardo' password='boda' sslmode=disable key='gid' table="t_giscup_track_point_1" (the_geom) sql=</datasource>
+            <title></title>
+            <abstract></abstract>
             <layername>Track1 (speed)</layername>
             <srs>
                 <spatialrefsys>
@@ -926,26 +948,26 @@
             <vectorjoins/>
             <renderer-v2 attr="speed" symbollevels="0" type="graduatedSymbol">
                 <ranges>
-                    <range symbol="0" lower="0" upper="8.573297100000001" label="0.0000 - 8.5733"/>
-                    <range symbol="1" lower="8.573297100000001" upper="17.1465942" label="8.5733 - 17.1466"/>
-                    <range symbol="2" lower="17.1465942" upper="25.7198913" label="17.1466 - 25.7199"/>
-                    <range symbol="3" lower="25.7198913" upper="34.29318840000001" label="25.7199 - 34.2932"/>
-                    <range symbol="4" lower="34.29318840000001" upper="42.86648550000001" label="34.2932 - 42.8665"/>
-                    <range symbol="5" lower="42.86648550000001" upper="51.43978260000002" label="42.8665 - 51.4398"/>
-                    <range symbol="6" lower="51.43978260000002" upper="60.01307970000002" label="51.4398 - 60.0131"/>
-                    <range symbol="7" lower="60.01307970000002" upper="68.58637680000002" label="60.0131 - 68.5864"/>
-                    <range symbol="8" lower="68.58637680000002" upper="77.15967390000003" label="68.5864 - 77.1597"/>
-                    <range symbol="9" lower="77.15967390000003" upper="85.73297100000003" label="77.1597 - 85.7330"/>
-                    <range symbol="10" lower="85.73297100000003" upper="94.30626810000004" label="85.7330 - 94.3063"/>
-                    <range symbol="11" lower="94.30626810000004" upper="102.8795652" label="94.3063 - 102.8796"/>
-                    <range symbol="12" lower="102.8795652" upper="111.4528623" label="102.8796 - 111.4529"/>
-                    <range symbol="13" lower="111.4528623" upper="120.0261594000001" label="111.4529 - 120.0262"/>
-                    <range symbol="14" lower="120.0261594000001" upper="128.5994565000001" label="120.0262 - 128.5995"/>
-                    <range symbol="15" lower="128.5994565000001" upper="137.1727536" label="128.5995 - 137.1728"/>
-                    <range symbol="16" lower="137.1727536" upper="145.7460507" label="137.1728 - 145.7461"/>
-                    <range symbol="17" lower="145.7460507" upper="154.3193478" label="145.7461 - 154.3193"/>
-                    <range symbol="18" lower="154.3193478" upper="162.8926449" label="154.3193 - 162.8926"/>
-                    <range symbol="19" lower="162.8926449" upper="171.465942" label="162.8926 - 171.4659"/>
+                    <range symbol="0" lower="0" upper="8.5733" label="0.0000 - 8.5733"/>
+                    <range symbol="1" lower="8.5733" upper="17.1466" label="8.5733 - 17.1466"/>
+                    <range symbol="2" lower="17.1466" upper="25.7199" label="17.1466 - 25.7199"/>
+                    <range symbol="3" lower="25.7199" upper="34.2932" label="25.7199 - 34.2932"/>
+                    <range symbol="4" lower="34.2932" upper="42.8665" label="34.2932 - 42.8665"/>
+                    <range symbol="5" lower="42.8665" upper="51.4398" label="42.8665 - 51.4398"/>
+                    <range symbol="6" lower="51.4398" upper="60.0131" label="51.4398 - 60.0131"/>
+                    <range symbol="7" lower="60.0131" upper="68.5864" label="60.0131 - 68.5864"/>
+                    <range symbol="8" lower="68.5864" upper="77.1597" label="68.5864 - 77.1597"/>
+                    <range symbol="9" lower="77.1597" upper="85.733" label="77.1597 - 85.7330"/>
+                    <range symbol="10" lower="85.733" upper="94.3063" label="85.7330 - 94.3063"/>
+                    <range symbol="11" lower="94.3063" upper="102.88" label="94.3063 - 102.8796"/>
+                    <range symbol="12" lower="102.88" upper="111.453" label="102.8796 - 111.4529"/>
+                    <range symbol="13" lower="111.453" upper="120.026" label="111.4529 - 120.0262"/>
+                    <range symbol="14" lower="120.026" upper="128.599" label="120.0262 - 128.5995"/>
+                    <range symbol="15" lower="128.599" upper="137.173" label="128.5995 - 137.1728"/>
+                    <range symbol="16" lower="137.173" upper="145.746" label="137.1728 - 145.7461"/>
+                    <range symbol="17" lower="145.746" upper="154.319" label="145.7461 - 154.3193"/>
+                    <range symbol="18" lower="154.319" upper="162.893" label="154.3193 - 162.8926"/>
+                    <range symbol="19" lower="162.893" upper="171.466" label="162.8926 - 171.4659"/>
                 </ranges>
                 <symbols>
                     <symbol outputUnit="MM" alpha="1" type="marker" name="0">
@@ -1210,6 +1232,8 @@
         <maplayer minimumScale="0" maximumScale="1e+08" geometry="Point" type="vector" hasScaleBasedVisibilityFlag="0">
             <id>t_giscup_track_point_120120715220322788</id>
             <datasource>dbname='giscup' host=127.0.0.1 port=5432 user='leonardo' password='boda' sslmode=disable key='gid' table="t_giscup_track_point_1" (the_geom) sql=</datasource>
+            <title></title>
+            <abstract></abstract>
             <layername>Track1 (correct)</layername>
             <srs>
                 <spatialrefsys>
@@ -1313,6 +1337,8 @@
         <maplayer minimumScale="0" maximumScale="1e+08" geometry="Point" type="vector" hasScaleBasedVisibilityFlag="0">
             <id>t_giscup_track_point_220120715012826433</id>
             <datasource>dbname='giscup' host=127.0.0.1 port=5432 user='leonardo' password='boda' sslmode=disable key='gid' table="t_giscup_track_point_2" (the_geom) sql=</datasource>
+            <title></title>
+            <abstract></abstract>
             <layername>t_giscup_track_point_2</layername>
             <srs>
                 <spatialrefsys>
@@ -1415,6 +1441,8 @@
         <maplayer minimumScale="0" maximumScale="1e+08" geometry="Point" type="vector" hasScaleBasedVisibilityFlag="0">
             <id>t_giscup_track_point_320120715013546405</id>
             <datasource>dbname='giscup' host=127.0.0.1 port=5432 user='leonardo' password='boda' sslmode=disable key='gid' table="t_giscup_track_point_3" (the_geom) sql=</datasource>
+            <title></title>
+            <abstract></abstract>
             <layername>t_giscup_track_point_3</layername>
             <srs>
                 <spatialrefsys>

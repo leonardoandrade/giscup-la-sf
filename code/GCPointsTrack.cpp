@@ -273,18 +273,29 @@ void GCPointsTrack::weightDirection3(GCRoadNetwork * rn)
                 //cout << i <<" sim="<<sim<< ";c_before_index=" << c_before_index << ";c_after_index=" << c_after_index\
                  << ";c_before_min_dist=" << c_before_min_dist << ";c_after_min_dist=" << c_after_min_dist << endl;
                 p->edges_direction_weight[j]=sim;
+
+		 p->edges_direction_weight[j]= p->edges_direction_weight[j]*p->speed;
             }
         }
 }
 
 void GCPointsTrack::computeSpeed()
 {
+	//compute speed at km/h
         for(int i=1; i<points->size()-1; i++)
         {
             float dist=distance(points->at(i-1)->x,points->at(i-1)->y,points->at(i+1)->x,points->at(i+1)->y);
             int delta_t=(points->at(i+1)->id)-(points->at(i-1)->id);
             points->at(i)->speed=(dist/(float)delta_t)*3.6;
         }
+	//normalize with ceiling =60;
+
+	for(int i=1; i<points->size()-1; i++)
+        {
+            points->at(i)->speed=min((float)60.0,points->at(i)->speed)/60.0;
+        }
+
+	
 }
 
 void GCPointsTrack::weightTopology()
@@ -292,7 +303,7 @@ void GCPointsTrack::weightTopology()
 
 
     /*load terminal points with values to propagate*/
-    /*
+    
     GCPoint * p_initial = points->at(0);
     GCPoint * p_final = points->at(points->size()-1);
     for(int j=0;j <p_initial->num_edges; j++)
@@ -304,10 +315,10 @@ void GCPointsTrack::weightTopology()
     {
         p_final->edges_adjacency_weight[j]=points->size();
     }
-*/
+
     /* the iterations */
-  //  for(int iter=0; iter<points->size()/2; iter++)
-    //{
+    for(int iter=0; iter<points->size(); iter++)
+    {
 
 
     /*forward motion*/
@@ -426,7 +437,7 @@ void GCPointsTrack::weightTopology()
 
             p->edges_adjacency_weight[j]=p->edges_adjacency_weight[j]/(eval_params->topology_adjacent_same_streetname);
         }
-    //}//iterations
+    }//iterations
     }
     /*normalization in the end */
     for(int i=0; i<points->size(); i++)

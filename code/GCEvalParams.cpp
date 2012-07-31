@@ -10,9 +10,9 @@ GCEvalParams::GCEvalParams()
     b_distance=0.5;
     b_direction=0.3;
     b_adjacency=0.2;
-    topology_adjacent_same_edge=0;
-    topology_adjacent_accessible=0;
-    topology_adjacent_same_streetname=0;
+    topology_adjacent_same_edge=0.5;
+    topology_adjacent_accessible=0.5;
+    topology_adjacent_same_streetname=2.0;
 }
 
 
