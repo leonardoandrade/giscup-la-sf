@@ -6,13 +6,15 @@ GCEvalParams::GCEvalParams()
 {
 
     //0.37;0.26;0.37;1.91;1.68;1.34
+    //0.35;0.32;0.33;0.51;0.07;0.99
 
-    b_distance=0.43;
-    b_direction=0.37;
-    b_adjacency=0.2;
-    topology_adjacent_same_edge=1.17;
-    topology_adjacent_accessible=0.99;
-    topology_adjacent_same_streetname=1.62;
+    //0.43;=0.43;=0.2;=0.2;0.99;1.62;
+    b_distance=0.35;
+    b_direction=0.32;
+    b_adjacency=0.33;
+    topology_adjacent_same_edge=0.51;
+    topology_adjacent_accessible=0.07;
+    topology_adjacent_same_streetname=0.99;
 }
 
 

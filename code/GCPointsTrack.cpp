@@ -77,7 +77,7 @@ void GCPointsTrack::findNearestEdges(GCRoadNetwork * rn)
         //int n_edges=rn->numberEdges();
         //int closest_edge_id=-99;
         //float closest_edge_distance=9999999999.0;
-        vector <GCEdge*> ee = rn->findEdgesByRadius(p,100);
+        vector <GCEdge*> ee = rn->findEdgesByRadius(p,30);
 
 
 

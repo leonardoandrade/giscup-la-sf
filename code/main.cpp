@@ -11,6 +11,8 @@
 #include <fstream>
 #include <string>
 
+
+/*for simulating for the best parameters in a randomized way*/
 //#define MONTE_CARLO_MODE 1
 
 // for operation timming
